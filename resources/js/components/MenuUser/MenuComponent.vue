@@ -10,6 +10,7 @@
                 </div>
                 <button @click="toggleVisibility" class="lang">
                     <button class="lang-button btn">English</button>
+                    <button class="lang-button btn">English</button>
                 </button>
             </div>
             <div class="row-two">
