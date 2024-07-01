@@ -1,29 +1,40 @@
 <template>
-    <div style="scroll-snap-align: center" class="subcategories w-full p-2 bg-[#EEEEEE] border-t-gray-200 border-b-gray-200 border-2">
+    <div v-if="subCategories.length" class="subcategories w-full p-2 bg-[#EEEEEE] border-t-gray-200 border-b-gray-200 border-2">
         <div class="buttons flex flex-wrap gap-2">
-            <a href="#">
-                <div class="subActive rounded-full bg-[#252525ce] text-white px-[6px] py-[3px]">All</div>
-            </a>
-
-            <a href="#">
-                <div style="box-shadow: 1px 1px 0px #0003" class="rounded-[35px] bg-[#F5F5F5] text-black px-[6px] py-[3px] text-[.95rem]">Chicken</div>
-            </a>
-            <a href="#">
-                <div style="box-shadow: 1px 1px 0px #0003" class="rounded-[35px] bg-[#F5F5F5] text-black px-[6px] py-[3px] text-[.95rem]">Chicken</div>
-            </a>
-            <a href="#">
-                <div style="box-shadow: 1px 1px 0px #0003" class="rounded-[35px] bg-[#F5F5F5] text-black px-[6px] py-[3px] text-[.95rem]">Chicken</div>
-            </a>
-            <a href="#"> <div style="box-shadow: 1px 1px 0px #0003" class="rounded-[35px] bg-[#F5F5F5] text-black px-[6px] py-[3px] text-[.95rem]">Chicken</div> </a><a href="#"> <div style="box-shadow: 1px 1px 0px #0003" class="rounded-[35px] bg-[#F5F5F5] text-black px-[6px] py-[3px] text-[.95rem]">Chicken</div> </a><a href="#"> <div style="box-shadow: 1px 1px 0px #0003" class="rounded-[35px] bg-[#F5F5F5] text-black px-[6px] py-[3px] text-[.95rem]">Chicken</div> </a><a href="#"> <div style="box-shadow: 1px 1px 0px #0003" class="rounded-[35px] bg-[#F5F5F5] text-black px-[6px] py-[3px] text-[.95rem]">Chicken</div> </a><a href="#"> <div style="box-shadow: 1px 1px 0px #0003" class="rounded-[35px] bg-[#F5F5F5] text-black px-[6px] py-[3px] text-[.95rem]">Chicken</div> </a><a href="#"> <div style="box-shadow: 1px 1px 0px #0003" class="rounded-[35px] bg-[#F5F5F5] text-black px-[6px] py-[3px] text-[.95rem]">Chicken</div> </a
-            ><a href="#">
-                <div style="box-shadow: 1px 1px 0px #0003" class="rounded-[35px] bg-[#F5F5F5] text-black px-[6px] py-[3px] text-[.95rem]">Chicken</div>
-            </a>
+            <div v-for="subCategory in subCategories" :key="subCategory.id" @click="filterFoods(subCategory.id)">
+                <a href="#">
+                    <div :class="activeSubId === subCategory.id ? 'activeSubCat' : 'notActiveSubCat'" class="rounded-full px-[6px] py-[3px]">{{ subCategory.name[currentLang] }}</div>
+                </a>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
-export default {};
+export default {
+    data() {
+        return {};
+    },
+    props: {
+        currentLang: String,
+        subCategories: Array,
+        activeSubId: Number,
+    },
+    methods: {
+        filterFoods(id) {
+            this.$emit("filterFoods", id);
+        },
+    },
+};
 </script>
 
-<style scoped></style>
+<style scoped>
+.activeSubCat {
+    background-color: #5a5858ce;
+    color: white;
+}
+.notActiveSubCat {
+    background-color: white;
+    color: #252525ce;
+}
+</style>

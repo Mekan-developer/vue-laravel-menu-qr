@@ -1,61 +1,12 @@
 <template>
-    <div class="grid-container m-[10px]">
-        <a href="#">
-            <div class="menu-product_item">
-                <div class="menu-product_item_toolbar">
-                    <div style="flex-grow: 1"></div>
-                    <button class="btn-like">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            stroke="#222222"
-                            stroke-width="1.2px"
-                            x="0px"
-                            y="0px"
-                            viewBox="-1 -2 14 13"
-                            xml:space="preserve"
-                        >
-                            <path
-                                d="M11,1c-0.6-0.6-1.5-1-2.3-1C7.8,0,7,0.4,6.3,1L6,1.3L5.7,1C5,0.3,4.2,0,3.3,0S1.6,0.3,1,1C0.3,1.6,0,2.4,0,3.3S0.3,5,1,5.7
-                                      l4.8,4.8C5.9,10.6,6,10.6,6,10.6c0.1,0,0.2,0,0.2-0.1L11,5.7c0.6-0.6,1-1.5,1-2.4S11.7,1.6,11,1z"
-                            ></path>
-                        </svg>
-                    </button>
-                </div>
-                <div class="menu-product_item_img">
-                    <img
-                        class="menu-product_item_img_full"
-                        src="https://instalacarte.com/media/cache/mobile_image/product/23/131/f035a5b685caa0cb87b98d8a8babd57c.png"
-                        alt="Item image"
-                        decoding="async"
-                    />
-                </div>
-                <div class="menu-product_item_name_price py-1 px-[6px]">
-                    <div class="menu-product_item_name text-overflow">
-                        {{ getTruncatedText(foodName) }}
-                    </div>
-                    <div class="menu-product_item_price no-wrap">9.75 $</div>
-                </div>
-            </div>
-        </a>
-
-        <!--  -->
-        <a href="#">
-            <div class="menu-product">
+    <div class="grid-container m-[10px]" v-if="foods">
+        <template v-for="food in foods" :key="food.id">
+            <a href="#">
                 <div class="menu-product_item">
                     <div class="menu-product_item_toolbar">
                         <div style="flex-grow: 1"></div>
-                        <button class="btn-like btn-like-active">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                stroke="#222222"
-                                stroke-width="1.2px"
-                                x="0px"
-                                y="0px"
-                                viewBox="-1 -2 14 13"
-                                xml:space="preserve"
-                            >
+                        <button class="btn-like">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#222222" stroke-width="1.2px" x="0px" y="0px" viewBox="-1 -2 14 13" xml:space="preserve">
                                 <path
                                     d="M11,1c-0.6-0.6-1.5-1-2.3-1C7.8,0,7,0.4,6.3,1L6,1.3L5.7,1C5,0.3,4.2,0,3.3,0S1.6,0.3,1,1C0.3,1.6,0,2.4,0,3.3S0.3,5,1,5.7
                                       l4.8,4.8C5.9,10.6,6,10.6,6,10.6c0.1,0,0.2,0,0.2-0.1L11,5.7c0.6-0.6,1-1.5,1-2.4S11.7,1.6,11,1z"
@@ -64,66 +15,17 @@
                         </button>
                     </div>
                     <div class="menu-product_item_img">
-                        <img
-                            class="menu-product_item_img_full"
-                            src="https://instalacarte.com/media/cache/mobile_image/product/23/131/f035a5b685caa0cb87b98d8a8babd57c.png"
-                            alt="Item image"
-                            decoding="async"
-                        />
+                        <img class="menu-product_item_img_full" :src="getImageSrc(food.image)" alt="Item image" decoding="async" />
                     </div>
-                    <div class="menu-product_item_name_price">
+                    <div class="menu-product_item_name_price py-1 px-[6px]">
                         <div class="menu-product_item_name text-overflow">
-                            {{ getTruncatedText("foodName") }}
+                            {{ getTruncatedText(food.name[currentLang]) }}
                         </div>
-                        <div class="menu-product_item_price no-wrap">
-                            9.75 £
-                        </div>
+                        <div class="menu-product_item_price no-wrap">{{ food.price }} $</div>
                     </div>
                 </div>
-            </div>
-        </a>
-        <a href="#">
-            <div class="menu-product">
-                <div class="menu-product_item">
-                    <div class="menu-product_item_toolbar">
-                        <div style="flex-grow: 1"></div>
-                        <button class="btn-like btn-like-active">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                stroke="#222222"
-                                stroke-width="1.2px"
-                                x="0px"
-                                y="0px"
-                                viewBox="-1 -2 14 13"
-                                xml:space="preserve"
-                            >
-                                <path
-                                    d="M11,1c-0.6-0.6-1.5-1-2.3-1C7.8,0,7,0.4,6.3,1L6,1.3L5.7,1C5,0.3,4.2,0,3.3,0S1.6,0.3,1,1C0.3,1.6,0,2.4,0,3.3S0.3,5,1,5.7
-                                      l4.8,4.8C5.9,10.6,6,10.6,6,10.6c0.1,0,0.2,0,0.2-0.1L11,5.7c0.6-0.6,1-1.5,1-2.4S11.7,1.6,11,1z"
-                                ></path>
-                            </svg>
-                        </button>
-                    </div>
-                    <div class="menu-product_item_img">
-                        <img
-                            class="menu-product_item_img_full"
-                            src="https://instalacarte.com/media/cache/mobile_image/product/23/131/f035a5b685caa0cb87b98d8a8babd57c.png"
-                            alt="Item image"
-                            decoding="async"
-                        />
-                    </div>
-                    <div class="menu-product_item_name_price">
-                        <div class="menu-product_item_name text-overflow">
-                            hot chicken katsu curry
-                        </div>
-                        <div class="menu-product_item_price no-wrap">
-                            9.75 $
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </a>
+            </a>
+        </template>
     </div>
 </template>
 
@@ -131,15 +33,22 @@
 export default {
     data() {
         return {
-            foodName: "hot chicken katsu curry www",
+            // foodName: "hot chicken katsu curry www",
         };
     },
+    props: {
+        foods: Object,
+        currentLang: String,
+    },
     methods: {
+        getImageSrc(image) {
+            return `/menu-icons/${image}`;
+        },
         getTruncatedText(foodName) {
-            if (this.foodName.length > 25) {
-                return this.foodName.substring(0, 23) + "...";
+            if (foodName.length > 25) {
+                return foodName.substring(0, 23) + "...";
             }
-            return this.foodName;
+            return foodName;
         },
     },
 };
@@ -153,7 +62,7 @@ export default {
     padding-right: 3px;
 }
 .menu-product_item {
-    background-color: #fafafa;
+    background-color: #a08f8f3b;
     color: #222222;
     position: relative;
     cursor: pointer;
@@ -161,7 +70,7 @@ export default {
     border-radius: 10px;
     overflow: hidden;
     backdrop-filter: blur(20px);
-    scroll-snap-align: center;
+    /* scroll-snap-align: center; */
 }
 .menu-product_item_toolbar {
     position: absolute;
@@ -185,6 +94,8 @@ export default {
 }
 .menu-product_item_img {
     height: 130px;
+    aspect-ratio: 1/1;
+    margin: auto;
     position: relative;
 }
 .menu-product_item_img img {

@@ -22,7 +22,7 @@
 export default {
     props: {
         visibility: Boolean,
-        langs: Array,
+        langs: Object,
     },
     methods: {
         toggleVisibility() {
@@ -48,6 +48,7 @@ export default {
     background-color: rgba(82, 92, 107, 0.274);
     width: 100%;
     height: 100%;
+    overflow: hidden;
 }
 .popup-lang {
     position: relative;
@@ -57,7 +58,7 @@ export default {
     width: 100%;
     height: 100%;
     top: -550px;
-    animation: drop 1.5s ease forwards;
+    animation: drop 1.8s ease forwards;
 }
 /* popup animation style end */
 
@@ -83,10 +84,10 @@ export default {
         transform: translateY(520px);
     }
     90% {
-        transform: translateY(550px);
+        transform: translateY(570px);
     }
     100% {
-        transform: translateY(540px);
+        transform: translateY(560px);
     }
 }
 
@@ -105,7 +106,7 @@ export default {
         width: 320px;
     }
     100% {
-        width: 300px;
+        width: 280px;
     }
 }
 </style>
