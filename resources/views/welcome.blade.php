@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <title>Laravel</title>
+        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
         @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/css/app.css'])
     </head>
     <body >
