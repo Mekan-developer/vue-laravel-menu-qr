@@ -17,6 +17,11 @@
                     <input class="form-control" type="file" id="formFileMultiple" multiple />
                 </div>
             </div>
+            <div class="mb-4">
+                <h1 class="mb-2">Category is active?</h1>
+                <ToggleSwitch v-model="isToggled" />
+                <!-- <p>Switch is {{ isToggled ? "ON" : "OFF" }}</p> -->
+            </div>
             <div class="d-grid gap-2">
                 <button class="btn btn-primary" type="button">Save</button>
             </div>
@@ -25,6 +30,9 @@
 </template>
 
 <script>
+import { ref } from "vue";
+import ToggleSwitch from "./components/ToggleSwitch.vue";
+
 export default {
     props: {
         isActiveCreate: Boolean,
@@ -36,7 +44,43 @@ export default {
     },
 
     methods: {},
+    setup() {
+        const isToggled = ref(true);
+
+        return {
+            isToggled,
+        };
+    },
+    components: {
+        ToggleSwitch,
+    },
 };
 </script>
 
-<style></style>
+<style>
+.toggle-switch {
+    width: 50px;
+    height: 25px;
+    background-color: #ccc;
+    border-radius: 25px;
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.toggle-switch.is-checked {
+    background-color: #4caf50;
+}
+.switch-handle {
+    width: 23px;
+    height: 23px;
+    background-color: #fff;
+    border-radius: 50%;
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    transition: left 0.3s;
+}
+.toggle-switch.is-checked .switch-handle {
+    left: 26px;
+}
+</style>

@@ -16,10 +16,11 @@ import FoodComponent from "./MenuParts/FoodComponent.vue";
 import LangpopupComponent from "./MenuParts/LangpopupComponent.vue";
 
 export default {
+    props: { language: String },
     data() {
         return {
             isVisible: false,
-            language: "tm",
+
             activeCatId: null,
             activeSubId: null,
             langs: {
@@ -185,12 +186,13 @@ export default {
     mounted() {
         this.filterSubCategories(this.minCategoryId);
     },
+    emits: ["changeLanguage"],
     methods: {
         toggleVisibility() {
             this.isVisible = !this.isVisible;
         },
         changeLanguage(lang) {
-            this.language = lang;
+            this.$emit("changeLanguage", lang);
         },
         // mouse scroll yada phone-de finger bilen scrol edeninde ishleyan funcsiya start
         onWheel(event) {
@@ -232,7 +234,6 @@ export default {
                 } else {
                     this.filteredFoods = this.filteredSubCategories[0].foods;
                     this.activeSubId = this.filteredSubCategories[0].id;
-                    console.log(this.activeSubId);
                 }
             }
         },

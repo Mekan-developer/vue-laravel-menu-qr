@@ -33,7 +33,7 @@
 export default {
     data() {
         return {
-            // foodName: "hot chicken katsu curry www",
+            foodName: "hot chicken katsu curry www",
         };
     },
     props: {
@@ -47,8 +47,9 @@ export default {
         getTruncatedText(foodName) {
             if (foodName.length > 25) {
                 return foodName.substring(0, 23) + "...";
+            } else {
+                return foodName;
             }
-            return foodName;
         },
     },
 };
