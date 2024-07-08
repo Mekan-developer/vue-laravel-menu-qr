@@ -12,12 +12,16 @@ Route::get('/user', function (Request $request) {
 
 
 Route::get('/change-lang', function (Request $request) {
-    $lang = $request->query('lang', 'en');
-    app()->setLang($lang);
-    return response()->json(['message' => trans('messages.welcome')]);
+    $lang = $request->lang;
+    app()->setLocale($lang);
+    return response()->json(['success' => "lang is changed - " . app()->getLocale()]);
 });
 
-Route::get('/welcome-message', function () {
+Route::get('/get-locale', [LanguageController::class, 'getLocale']);
+
+Route::get('/welcome-message', function (Request $request) {
+    $lang = request()->lang;
+    // app()->setLocale($lang);
+    App::setLocale($lang);
     return response()->json(['message' => trans('messages.welcome')]);
 });
-Route::get('/get-locale', [LanguageController::class, 'getLocale']);

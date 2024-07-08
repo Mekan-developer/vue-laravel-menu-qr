@@ -64,39 +64,19 @@ export default {
 
 @keyframes drop {
     0% {
-    }
-    30% {
-        transform: translateY(620px);
-    }
-    40% {
-        transform: translateY(500px);
-    }
-    50% {
-        transform: translateY(570px);
-    }
-    60% {
-        transform: translateY(510px);
-    }
-    70% {
-        transform: translateY(560px);
-    }
-    80% {
-        transform: translateY(520px);
-    }
-    90% {
-        transform: translateY(570px);
+        transform: translateY(600px);
     }
     100% {
-        transform: translateY(560px);
+        transform: translateY(590px);
     }
 }
 
 .langs-div {
     position: relative;
-    width: 0;
+    width: 260px;
     height: auto;
     overflow: hidden;
-    animation: widthOut 1.5s ease forwards;
+    /* animation: widthOut 1.5s ease forwards; */
 }
 @keyframes widthOut {
     0% {
