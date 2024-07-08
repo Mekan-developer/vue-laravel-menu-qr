@@ -64,6 +64,8 @@ export default {
 
 @keyframes drop {
     0% {
+    }
+    30% {
         transform: translateY(600px);
     }
     100% {
@@ -76,7 +78,7 @@ export default {
     width: 260px;
     height: auto;
     overflow: hidden;
-    /* animation: widthOut 1.5s ease forwards; */
+    animation: widthOut 1.5s ease forwards;
 }
 @keyframes widthOut {
     0% {

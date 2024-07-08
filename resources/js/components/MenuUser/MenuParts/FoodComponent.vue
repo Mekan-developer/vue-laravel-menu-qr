@@ -19,7 +19,7 @@
                     </div>
                     <div class="menu-product_item_name_price py-1 px-[6px]">
                         <div class="menu-product_item_name text-overflow">
-                            {{ getTruncatedText(food.name[currentLang]) }}
+                            <!-- {{ getTruncatedText(food.name[currentLang]) }} -->
                         </div>
                         <div class="menu-product_item_price no-wrap">{{ food.price }} $</div>
                     </div>

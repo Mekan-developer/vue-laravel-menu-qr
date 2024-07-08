@@ -1,5 +1,5 @@
 <template>
-    <div v-if="isActiveCreate" class="flex flex-col justify-center items-center absolute left-0 top-0 z-[9999] w-full h-full bg-[#11101d63] px-16">
+    <div v-if="isActiveCreate" class="manual-style flex flex-col justify-center items-center absolute left-0 top-0 z-[9999] w-full h-full bg-[#11101d63] px-16">
         <div class="bg-white rounded-lg p-4">
             <div class="flex justify-end w-full mb-4">
                 <div class="flex-grow-1 text-center text-[#216dcfbb] text-[16px]">Category add</div>
@@ -58,6 +58,10 @@ export default {
 </script>
 
 <style>
+.manual-style {
+    transition: all 0.5s easy;
+}
+
 .toggle-switch {
     width: 50px;
     height: 25px;

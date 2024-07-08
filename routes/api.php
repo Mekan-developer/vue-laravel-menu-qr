@@ -21,7 +21,7 @@ Route::get('/get-locale', [LanguageController::class, 'getLocale']);
 
 Route::get('/welcome-message', function (Request $request) {
     $lang = request()->lang;
-    // app()->setLocale($lang);
-    App::setLocale($lang);
+    app()->setLocale($lang);
+    // App::setLocale($lang);
     return response()->json(['message' => trans('messages.welcome')]);
 });
