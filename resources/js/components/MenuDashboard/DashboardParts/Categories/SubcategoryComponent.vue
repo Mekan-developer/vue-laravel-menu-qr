@@ -40,6 +40,7 @@ export default {
     props: {
         isActiveCreate: Boolean,
         language: String,
+        languages: Object,
     },
     emits: ["popupDeleteCreate"],
     data() {

@@ -1,7 +1,7 @@
 <template>
     <div>
-        <div>{{ message }} - asdsad</div>
-        <router-view :language="language" @changeLanguage="changeLanguage"></router-view>
+        <!-- <div>{{ message }} - asdsad</div> -->
+        <router-view :language="language" @changeLanguage="changeLanguage" :languages="languages"></router-view>
     </div>
 </template>
 
@@ -13,12 +13,13 @@ export default {
         return {
             message: "",
             language: "",
+            languages: {},
         };
     },
     mounted() {
         this.getLocale();
+        this.getSupportedLocales();
     },
-    // mounted() {},
     methods: {
         getLocale() {
             axios.get("/api/get-locale").then((response) => {
@@ -26,24 +27,29 @@ export default {
             });
             this.getMessage(this.language);
         },
+        getSupportedLocales() {
+            axios
+                .get("/api/languages")
+                .then((response) => {
+                    this.languages = response.data.languages;
+                })
+                .catch((error) => {
+                    console.error("Error fetching languages:", error);
+                });
+        },
+
+        changeLanguage(lang) {
+            axios.get(`/api/change-lang?lang=${lang}`).then((response) => {
+                console.log(response.data.success);
+            });
+            this.language = lang;
+            this.getMessage(lang);
+        },
         getMessage(lang) {
             axios.get(`/api/welcome-message?lang=${lang}`).then((response) => {
                 this.message = response.data.message;
                 console.log(response.data.message);
             });
-        },
-        changeLanguage(lang) {
-            axios
-                .get(`/api/change-lang?lang=${lang}`)
-                .then((response) => {
-                    // Handle response if needed
-                    console.log(response.data.success); // Assuming response is JSON with 'success' key
-                })
-                .catch((error) => {
-                    console.error("Error changing lanuage:", error);
-                });
-            this.language = lang;
-            this.getMessage(lang);
         },
     },
 };

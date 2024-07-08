@@ -20,7 +20,7 @@
                 </div>
             </div>
         </div>
-        <router-view @popup-delete-create="isVisibilityCreate" :isActiveCreate="isActiveCreate" :language="language"></router-view>
+        <router-view @popup-delete-create="isVisibilityCreate" :isActiveCreate="isActiveCreate" :language="language" :languages="languages"></router-view>
     </div>
 </template>
 
@@ -28,6 +28,7 @@
 export default {
     props: {
         language: String,
+        languages: Object,
     },
     data() {
         return {

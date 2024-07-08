@@ -4,7 +4,9 @@ namespace App\Http\Controllers\dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\c;
+use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends Controller
 {
@@ -29,7 +31,28 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $fileName = $file->getClientOriginalName();
+            $path = 'public/files/' . $fileName;
+
+            // Store the file
+            Storage::putFileAs('public/files', $file, $fileName);
+            $message = 'File upload successfully';
+
+        }
+        $names = json_decode($request->name, true);
+        $is_active = filter_var($request->is_active, FILTER_VALIDATE_BOOLEAN);
+
+        Category::create([
+            'name' => $names,
+            'image' => $fileName,
+            'is_active' => $is_active,
+        ]);
+        return $message;
+
     }
 
     /**

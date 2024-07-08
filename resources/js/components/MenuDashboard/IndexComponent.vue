@@ -80,16 +80,17 @@
             </div>
         </div>
         <div class="home_content">
-            <router-view :language="language"></router-view>
+            <router-view :language="language" :languages="languages"></router-view>
         </div>
     </div>
 </template>
 
 <script>
 export default {
+    props: { language: String, languages: Object },
+
     data() {
         return {
-            language: "ru",
             isActive: true,
         };
     },

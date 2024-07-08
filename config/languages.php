@@ -2,6 +2,6 @@
 return [
     'en' => 'English',
     'tm' => 'Turkmen',
-    'ru' => 'Russian',
+    // 'ru' => 'Russian',
     // 'tk' => 'Turkish'
 ];

@@ -13,7 +13,7 @@
         <div id="app">
             
             <main-component></main-component>
-            {{app()->getLocale();}}
+            {{-- {{app()->getLocale();}} --}}
         </div>
     </body>
 </html>

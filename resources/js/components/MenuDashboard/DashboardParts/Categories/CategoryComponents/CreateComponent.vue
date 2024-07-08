@@ -6,15 +6,15 @@
                 <i @click="$emit('popupDeleteCreate')" class="bx bx-x text-[24px] p-2 cursor-pointer"></i>
             </div>
             <div class="flex flex-wrap justify-center gap-4">
-                <div class="flex-grow-1 form-floating mb-3 overflow-hidden" v-for="lang in langs" :key="lang.index">
-                    <input type="text" :name="`data_name_${lang}`" class="form-control over" id="floatingInput" placeholder="name@example.com" />
-                    <label for="floatingInput">category name {{ lang }}</label>
+                <div v-for="(lang, code) in langs" :key="code" class="flex-grow-1 form-floating mb-3 overflow-hidden">
+                    <input type="text" v-model="name[code]" class="form-control over" id="input-{{ code }}" placeholder="name@example.com" />
+                    <label :for="'input-' + code">name of category {{ code }}</label>
                 </div>
             </div>
             <div>
                 <div class="mb-3">
                     <label for="formFileMultiple" class="form-label">Menu image</label>
-                    <input class="form-control" type="file" id="formFileMultiple" multiple />
+                    <input class="form-control" type="file" @change="onChange" id="formFileMultiple" multiple />
                 </div>
             </div>
             <div class="mb-4">
@@ -23,7 +23,7 @@
                 <!-- <p>Switch is {{ isToggled ? "ON" : "OFF" }}</p> -->
             </div>
             <div class="d-grid gap-2">
-                <button class="btn btn-primary" type="button">Save</button>
+                <button v-on:click.prevent="store" class="btn btn-primary" type="submit">Save</button>
             </div>
         </div>
     </div>
@@ -32,18 +32,49 @@
 <script>
 import { ref } from "vue";
 import ToggleSwitch from "./components/ToggleSwitch.vue";
+import axios from "axios";
 
 export default {
     props: {
         isActiveCreate: Boolean,
+        languages: Object,
     },
     data() {
+        const name = {};
+        Object.keys(this.languages).forEach((code) => {
+            name[code] = "";
+        });
         return {
-            langs: ["tm", "en", "ru", "tk"],
+            langs: this.languages,
+            name: name,
+            image: "",
+            isToggled: true,
         };
     },
+    methods: {
+        store() {
+            let formData = new FormData();
 
-    methods: {},
+            formData.append("name", JSON.stringify(this.name));
+            formData.append("image", this.image);
+            formData.append("is_active", this.isToggled);
+
+            axios
+                .post("/api/category-store", formData)
+                .then((res) => {
+                    console.log(res);
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+            this.$emit("popupDeleteCreate");
+            // this.$router.push({ name: "dashboard.categories.index" });
+        },
+        onChange(e) {
+            this.image = e.target.files[0];
+        },
+    },
+
     setup() {
         const isToggled = ref(true);
 

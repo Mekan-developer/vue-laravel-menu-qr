@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\dashboard\CategoryController;
 use App\Http\Controllers\LanguageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -11,17 +12,13 @@ Route::get('/user', function (Request $request) {
 
 
 
-Route::get('/change-lang', function (Request $request) {
-    $lang = $request->lang;
-    app()->setLocale($lang);
-    return response()->json(['success' => "lang is changed - " . app()->getLocale()]);
-});
+Route::get('/change-lang', [LanguageController::class, 'changeLang']);
 
 Route::get('/get-locale', [LanguageController::class, 'getLocale']);
 
-Route::get('/welcome-message', function (Request $request) {
-    $lang = request()->lang;
-    app()->setLocale($lang);
-    // App::setLocale($lang);
-    return response()->json(['message' => trans('messages.welcome')]);
-});
+Route::get('/welcome-message', [LanguageController::class, 'welcomeMessage']);
+
+Route::get('/languages', [LanguageController::class, 'language']);
+
+
+Route::post('/category-store', [CategoryController::class, 'store']);
