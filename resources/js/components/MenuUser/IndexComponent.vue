@@ -3,7 +3,7 @@
         <header-component ref="childComponent" @filterSubCategories="filterSubCategories" :activeCatId="activeCatId" :categories="categories" @toggleVisibility="toggleVisibility" :lang="langs[language]" :currentLang="language"></header-component>
         <section ref="scrollArea" @wheel="onWheel" @touchstart="onTouchStart" @touchmove="onTouchMove" @touchend="onTouchEnd" id="main-section" class="pb-[10px]">
             <subcategory-component @filterFoods="filterFoods" :activeSubId="activeSubId" :subCategories="filteredSubCategories" :currentLang="language" ref="subCategory"></subcategory-component>
-            <food-component v-bind:foods="filteredFoods" :currentLang="language" ref="food"></food-component>
+            <food-component v-bind:foods="filteredFoods" :currentLang="language"></food-component>
         </section>
         <langpopup-component :visibility="isVisible" :langs="langs" @change-language="changeLanguage"></langpopup-component>
     </div>
