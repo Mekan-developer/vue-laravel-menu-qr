@@ -51,6 +51,7 @@ export default {
             isToggled: true,
         };
     },
+    emits: ["getCategories"],
     methods: {
         store() {
             let formData = new FormData();
@@ -68,7 +69,7 @@ export default {
                     console.error(error);
                 });
             this.$emit("popupDeleteCreate");
-            // this.$router.push({ name: "dashboard.categories.index" });
+            this.$emit("getCategories");
         },
         onChange(e) {
             this.image = e.target.files[0];

@@ -15,7 +15,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        $category = Category::all();
+        return response()->json($category);
     }
 
     /**
@@ -36,10 +37,11 @@ class CategoryController extends Controller
         if ($request->hasFile('image')) {
             $file = $request->file('image');
             $fileName = $file->getClientOriginalName();
-            $path = 'public/files/' . $fileName;
+            // $path = 'public/files/' . $fileName;
 
             // Store the file
-            Storage::putFileAs('public/files', $file, $fileName);
+            Storage::putFileAs('public/web_images/categories', $file, $fileName);
+            Storage::putFileAs('public/tablet_images/categories', $file, $fileName);
             $message = 'File upload successfully';
 
         }
@@ -58,32 +60,48 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(c $c)
-    {
-        //
-    }
+    // public function show(c $c)
+    // {
+    //     //
+    // }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(c $c)
-    {
-        //
-    }
+    // public function edit(c $c)
+    // {
+    //     //
+    // }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, c $c)
-    {
-        //
-    }
+    // public function update(Request $request, c $c)
+    // {
+    //     //
+    // }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(c $c)
+    public function destroy(Category $category, $id)
     {
-        //
+        $category = Category::findOrFail($id);
+
+        if ($category->image) {
+            $imagePathWeb = 'public/web_images/categories/' . $category->image;
+            $imagePathTablet = 'public/tablet_images/categories/' . $category->image;
+
+            if (Storage::exists($imagePathWeb)) {
+                Storage::delete($imagePathWeb);
+            }
+            if (Storage::exists($imagePathTablet)) {
+                Storage::delete($imagePathTablet);
+            }
+
+        }
+        $category->delete();
+
+        return response()->json(['message' => 'Category deleted successfully']);
     }
 }

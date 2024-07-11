@@ -87,7 +87,10 @@
 
 <script>
 export default {
-    props: { language: String, languages: Object },
+    props: {
+        language: String,
+        languages: Object,
+    },
 
     data() {
         return {

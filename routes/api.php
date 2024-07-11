@@ -22,3 +22,7 @@ Route::get('/languages', [LanguageController::class, 'language']);
 
 
 Route::post('/category-store', [CategoryController::class, 'store']);
+
+Route::get('/get-categories', [CategoryController::class, 'index']);
+
+Route::delete('/delete-category/{id}', [CategoryController::class, 'destroy']);
