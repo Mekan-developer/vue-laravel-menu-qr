@@ -11,11 +11,11 @@
             </ul>
             <div class="flex gap-4 h-full items-center mr-2 p-2">
                 <div>
-                    <input v-if="activeLinkCat" class="form-control" type="text" placeholder="search category" />
+                    <input v-if="this.$route.name == 'dashboard.categories.index'" class="form-control" type="text" placeholder="search category" />
                     <input v-else class="form-control" type="text" placeholder="search subcategory" />
                 </div>
                 <div>
-                    <button v-if="activeLinkCat" @click="isVisibilityCreate" class="btn btn-success whitespace-nowrap">Add cat...</button>
+                    <button v-if="this.$route.name == 'dashboard.categories.index'" @click="isVisibilityCreate" class="btn btn-success whitespace-nowrap">Add cat...</button>
                     <button v-else @click="isVisibilityCreate" class="btn btn-success whitespace-nowrap">Add sub...</button>
                 </div>
             </div>
@@ -36,8 +36,6 @@ export default {
             activeLinkCat: true,
         };
     },
-    mounted() {},
-
     methods: {
         statusChangeCat() {
             this.activeLinkCat = true;

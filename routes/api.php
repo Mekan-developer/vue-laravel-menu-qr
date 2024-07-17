@@ -20,9 +20,11 @@ Route::get('/welcome-message', [LanguageController::class, 'welcomeMessage']);
 
 Route::get('/languages', [LanguageController::class, 'language']);
 
-
-Route::post('/category-store', [CategoryController::class, 'store']);
-
 Route::get('/get-categories', [CategoryController::class, 'index']);
+Route::post('/category-store', [CategoryController::class, 'store']);
+Route::get('/edit-category/{category}', [CategoryController::class, 'edit']);
+Route::post('/category-store', [CategoryController::class, 'store']);
+Route::post('/category-update/{category}', [CategoryController::class, 'update']);
+
 
 Route::delete('/delete-category/{id}', [CategoryController::class, 'destroy']);

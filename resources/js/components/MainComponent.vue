@@ -39,16 +39,13 @@ export default {
         },
 
         changeLanguage(lang) {
-            axios.get(`/api/change-lang?lang=${lang}`).then((response) => {
-                console.log(response.data.success);
-            });
+            axios.get(`/api/change-lang?lang=${lang}`).then((response) => {});
             this.language = lang;
             this.getMessage(lang);
         },
         getMessage(lang) {
             axios.get(`/api/welcome-message?lang=${lang}`).then((response) => {
                 this.message = response.data.message;
-                console.log(response.data.message);
             });
         },
     },

@@ -1,5 +1,5 @@
 <template>
-    <div class="m-4 bg-gray-200 p-4 rounded-md">
+    <div class="m-3 p-3 h-full bg-gray-200 rounded-sm overflow-hidden">
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -12,12 +12,12 @@
             </thead>
             <tbody>
                 <tr v-for="category in categories" :key="category.id">
-                    <th scope="row">{{ category.id }}</th>
+                    <th scope="row">{{ category.index }}</th>
                     <td>{{ category.name[language] }}</td>
-                    <td><img :src="getImageUrl(category.image)" alt="category image" /></td>
+                    <td class="w-[100px] aspect-square"><img :src="getImageUrl(category.image)" class="rounded-md" alt="category image" /></td>
                     <td>{{ category.is_active ? "active" : "is not" }}</td>
                     <td>
-                        <button @click="isVisibilityEdit" class="btn btn-info mr-1">
+                        <button @click="editCategory(category.id)" class="btn btn-info mr-1">
                             <i class="bx bxs-edit"></i>
                         </button>
                         <button @click.prevent="deleteCategory(category.id)" class="btn btn-danger">
@@ -28,8 +28,9 @@
             </tbody>
         </table>
     </div>
-    <create-component @popup-delete-create="myAction" @get-categories="getCategories" :isActiveCreate="isActiveCreate" :languages="languages"></create-component>
-    <edit-component @popup-delete-edit="isVisibilityEdit" :isActiveEdit="isActiveEdit"></edit-component>
+    <create-component v-if="isActiveCreate" @popup-delete-create="myAction" @get-categories="getCategories" :languages="languages"></create-component>
+
+    <edit-component v-if="isActiveEdit" @popup-delete-edit="isVisibilityEdit" @get-categories="getCategories" :isActiveEdit="isActiveEdit" :category="category" :name="name" :languages="languages" :isToggled="isToggled"></edit-component>
 </template>
 
 <script>
@@ -45,9 +46,14 @@ export default {
     },
     emits: ["popupDeleteCreate"],
     data() {
+        const name = {};
         return {
             isActiveEdit: false,
             categories: [],
+            category: {},
+            name: name,
+            isToggled: false,
+            currentComponent: null,
         };
     },
     created() {
@@ -61,17 +67,17 @@ export default {
             this.isActiveEdit = !this.isActiveEdit;
         },
         getCategories() {
-            axios
-                .get("/api/get-categories")
-                .then((res) => {
-                    this.categories = res.data;
-                })
-                .catch((error) => {
-                    console.error("Error fetching categories", error);
-                });
+            axios.get("/api/get-categories").then((res) => {
+                this.categories = res.data.data.map((item, idx) => ({ ...item, index: idx + 1 }));
+            });
         },
-        getImageUrl(filename) {
-            return `/storage/web_images/categories/${filename}`;
+        editCategory(id) {
+            axios.get(`/api/edit-category/${id}`).then((res) => {
+                this.category = res.data.category;
+                this.isVisibilityEdit();
+                this.input_names();
+                this.isToggled = res.data.category.is_active ? true : false;
+            });
         },
         deleteCategory(id) {
             axios
@@ -82,6 +88,15 @@ export default {
                 .catch((error) => {
                     console.error("Error deleting categories", error);
                 });
+        },
+
+        input_names() {
+            Object.keys(this.languages).forEach((code) => {
+                this.name[code] = this.category.name[code];
+            });
+        },
+        getImageUrl(filename) {
+            return `/storage/web_images/categories/${filename}`;
         },
     },
     components: {
