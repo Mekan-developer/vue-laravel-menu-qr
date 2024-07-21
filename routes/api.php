@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\dashboard\CategoryController;
+use App\Http\Controllers\dashboard\FoodController;
 use App\Http\Controllers\LanguageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -11,17 +13,22 @@ Route::get('/user', function (Request $request) {
 
 
 
-Route::get('/change-lang', function (Request $request) {
-    $lang = $request->lang;
-    app()->setLocale($lang);
-    return response()->json(['success' => "lang is changed - " . app()->getLocale()]);
-});
+Route::get('/change-lang', [LanguageController::class, 'changeLang']);
 
 Route::get('/get-locale', [LanguageController::class, 'getLocale']);
 
-Route::get('/welcome-message', function (Request $request) {
-    $lang = request()->lang;
-    app()->setLocale($lang);
-    // App::setLocale($lang);
-    return response()->json(['message' => trans('messages.welcome')]);
-});
+Route::get('/welcome-message', [LanguageController::class, 'welcomeMessage']);
+
+Route::get('/languages', [LanguageController::class, 'language']);
+
+Route::get('/get-categories', [CategoryController::class, 'index']);
+Route::post('/category-store', [CategoryController::class, 'store']);
+Route::get('/edit-category/{category}', [CategoryController::class, 'edit']);
+Route::post('/category-store', [CategoryController::class, 'store']);
+Route::post('/category-update/{category}', [CategoryController::class, 'update']);
+
+Route::get('/food-create', [FoodController::class, 'create']);
+Route::apiResource('foods', FoodController::class);
+
+
+Route::delete('/delete-category/{id}', [CategoryController::class, 'destroy']);

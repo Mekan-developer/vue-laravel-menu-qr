@@ -12,3 +12,4 @@ Route::get('/dashboard', function () {
 Route::get('/dashboard/{page}', function () {
     return view('welcome');
 })->where('page', '.*');
+
