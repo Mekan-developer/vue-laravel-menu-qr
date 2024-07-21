@@ -8,7 +8,7 @@
                     <th scope="col">parent name</th>
                     <th scope="col">image</th>
                     <th scope="col">status</th>
-                    <th scope="col">Edit/Delete</th>
+                    <th scope="col" class="text-center items-center">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -16,9 +16,9 @@
                     <th scope="row">{{ category.index }}</th>
                     <td>{{ category.name[language] }}</td>
                     <td>{{ category.parent.name[language] }}</td>
-                    <td class="w-[100px] aspect-square"><img :src="getImageUrl(category.image)" class="rounded-md" alt="category image" /></td>
+                    <td class="w-[100px] aspect-square"><img :src="category.image" class="rounded-md" alt="category image" /></td>
                     <td>{{ category.is_active ? "active" : "not active" }}</td>
-                    <td>
+                    <td class="text-center items-center">
                         <button @click="editCategory(category.id)" class="btn btn-info mr-1">
                             <i class="bx bxs-edit"></i>
                         </button>
@@ -77,10 +77,6 @@ export default {
             } catch (error) {
                 console.error("Error fetching categories:", error);
             }
-        },
-
-        getImageUrl(filename) {
-            return `/storage/web_images/categories/${filename}`;
         },
         editCategory(id) {
             axios.get(`/api/edit-category/${id}`).then((res) => {

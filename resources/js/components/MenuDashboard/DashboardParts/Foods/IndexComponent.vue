@@ -7,7 +7,7 @@
                     <th scope="col">name</th>
                     <th scope="col">image</th>
                     <th scope="col">status</th>
-                    <th scope="col">Edit/Delete</th>
+                    <th scope="col">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -28,7 +28,7 @@
             </tbody>
         </table>
     </div>
-    <create-component @popup-delete-create="myAction" :isActiveCreate="isActiveCreate"></create-component>
+    <create-component v-if="isActiveCreate" @popup-delete-create="myAction" :language="language" :languages="languages"></create-component>
     <edit-component @popup-delete-edit="isVisibilityEdit" :isActiveEdit="isActiveEdit"></edit-component>
 </template>
 
@@ -39,6 +39,7 @@ import EditComponent from "./Components/EditComponent.vue";
 export default {
     props: {
         language: String,
+        languages: Object,
         isActiveCreate: Boolean,
     },
     emits: ["popupDeleteCreate"],

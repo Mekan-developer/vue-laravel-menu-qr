@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\dashboard\CategoryController;
+use App\Http\Controllers\dashboard\FoodController;
 use App\Http\Controllers\LanguageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -25,6 +26,9 @@ Route::post('/category-store', [CategoryController::class, 'store']);
 Route::get('/edit-category/{category}', [CategoryController::class, 'edit']);
 Route::post('/category-store', [CategoryController::class, 'store']);
 Route::post('/category-update/{category}', [CategoryController::class, 'update']);
+
+Route::get('/food-create', [FoodController::class, 'create']);
+Route::apiResource('foods', FoodController::class);
 
 
 Route::delete('/delete-category/{id}', [CategoryController::class, 'destroy']);

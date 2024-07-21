@@ -59,6 +59,7 @@ export default {
             selectedCategory: null,
             parent_id: null,
             image: "",
+            isLoading: false,
         };
     },
     created() {
@@ -73,7 +74,18 @@ export default {
                 this.categories = res.data.data;
             });
         },
+        delayedRecall() {
+            this.isLoading = true;
+            setTimeout(() => {
+                this.isLoading = false;
+                this.delayedRecall();
+            }, 3000);
+        },
+
         update(id) {
+            if (this.isLoading) {
+                return;
+            }
             let formData = new FormData();
             formData.append("name", JSON.stringify(this.name));
             formData.append("parent_id", this.selectedCategory);
@@ -83,6 +95,7 @@ export default {
                 this.$emit("popupDeleteEdit");
                 this.$emit("getCategories");
             });
+            this.delayedRecall();
         },
         onChange(e) {
             this.image = e.target.files[0];

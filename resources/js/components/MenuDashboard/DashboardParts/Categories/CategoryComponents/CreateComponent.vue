@@ -18,10 +18,14 @@
                         <input class="form-control" type="file" @change="onChange" id="formFileMultiple" />
                     </div>
                 </div>
-                <div class="mb-4">
-                    <h1 class="mb-2">Category is active?</h1>
-                    <ToggleSwitch v-model="isToggled" />
+                <div class="mb-4 flex gap-2 text-center items-center">
+                    <label class="switch">
+                        <input type="checkbox" v-model="isActive" />
+                        <span class="slider round"></span>
+                    </label>
+                    <span>is active</span>
                 </div>
+
                 <div class="d-grid gap-2">
                     <button class="btn btn-primary" type="submit">Save</button>
                 </div>
@@ -31,8 +35,6 @@
 </template>
 
 <script>
-import { ref } from "vue";
-import ToggleSwitch from "./components/ToggleSwitch.vue";
 import axios from "axios";
 
 export default {
@@ -47,7 +49,7 @@ export default {
             name: name,
             isLoading: false,
             image: "",
-            isToggled: false,
+            isActive: true,
         };
     },
     emits: ["popupDeleteCreate", "getCategories"],
@@ -60,6 +62,13 @@ export default {
                 this.name[code] = "";
             });
         },
+        delayedRecall() {
+            this.isLoading = true;
+            setTimeout(() => {
+                this.isLoading = false;
+                this.delayedRecall();
+            }, 3000);
+        },
         store() {
             if (this.isLoading) {
                 return;
@@ -68,7 +77,7 @@ export default {
             let formData = new FormData();
             formData.append("name", JSON.stringify(this.name));
             formData.append("image", this.image);
-            formData.append("is_active", this.isToggled);
+            formData.append("is_active", this.isActive);
             formData.append("image_require", true);
             axios
                 .post("/api/category-store", formData, {
@@ -80,53 +89,11 @@ export default {
                     this.$emit("popupDeleteCreate");
                     this.$emit("getCategories");
                 });
+            this.delayedRecall();
         },
         onChange(e) {
             this.image = e.target.files[0];
         },
     },
-
-    setup() {
-        const isToggled = ref(true);
-
-        return {
-            isToggled,
-        };
-    },
-    components: {
-        ToggleSwitch,
-    },
 };
 </script>
-
-<style>
-.manual-style {
-    transition: all 0.5s easy;
-}
-
-.toggle-switch {
-    width: 50px;
-    height: 25px;
-    background-color: #ccc;
-    border-radius: 25px;
-    position: relative;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-.toggle-switch.is-checked {
-    background-color: #4caf50;
-}
-.switch-handle {
-    width: 23px;
-    height: 23px;
-    background-color: #fff;
-    border-radius: 50%;
-    position: absolute;
-    top: 1px;
-    left: 1px;
-    transition: left 0.3s;
-}
-.toggle-switch.is-checked .switch-handle {
-    left: 26px;
-}
-</style>

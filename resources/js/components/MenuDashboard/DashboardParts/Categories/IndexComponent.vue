@@ -7,14 +7,14 @@
                     <th scope="col">name</th>
                     <th scope="col">image</th>
                     <th scope="col">status</th>
-                    <th scope="col">Edit/Delete</th>
+                    <th scope="col">Action</th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="category in categories" :key="category.id">
                     <th scope="row">{{ category.index }}</th>
                     <td>{{ category.name[language] }}</td>
-                    <td class="w-[100px] aspect-square"><img :src="getImageUrl(category.image)" class="rounded-md" alt="category image" /></td>
+                    <td class="w-[100px] aspect-square"><img :src="category.image" class="rounded-md" alt="category image" /></td>
                     <td>{{ category.is_active ? "active" : "is not" }}</td>
                     <td>
                         <button @click="editCategory(category.id)" class="btn btn-info mr-1">
@@ -95,9 +95,6 @@ export default {
                 this.name[code] = this.category.name[code];
             });
         },
-        getImageUrl(filename) {
-            return `/storage/web_images/categories/${filename}`;
-        },
     },
     components: {
         CreateComponent,
@@ -105,5 +102,3 @@ export default {
     },
 };
 </script>
-
-<style></style>

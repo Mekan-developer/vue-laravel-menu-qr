@@ -27,6 +27,14 @@ class Category extends Model
         return $this->belongsTo(Category::class, 'parent_id', 'id');
     }
 
+    public function getImage()
+    {
+        if (file_exists(public_path('/storage/web_images/categories/' . $this->image)) && !is_null($this->image)) {
+            return asset('/storage/web_images/categories/' . $this->image);
+        }
+        return null;
+    }
+
 
 
 }
