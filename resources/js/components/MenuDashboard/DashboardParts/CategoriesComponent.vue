@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-col h-full">
-        <div class="flex justify-between bg-white border-b-2 border-gray-300">
+        <div class="flex justify-between bg-white border-b-2 border-gray-700">
             <ul class="flex list-none px-1 py-0 m-0 uppercase text-[12px] font-bold">
                 <router-link @click="statusChangeCat" :to="{ name: 'dashboard.categories.index' }">
                     <li class="p-3">Categories</li>
@@ -10,13 +10,11 @@
                 </router-link>
             </ul>
             <div class="flex gap-4 h-full items-center mr-2 p-2">
-                <div>
-                    <input v-if="this.$route.name == 'dashboard.categories.index'" class="form-control" type="text" placeholder="search category" />
-                    <input v-else class="form-control" type="text" placeholder="search subcategory" />
-                </div>
-                <div>
-                    <button v-if="this.$route.name == 'dashboard.categories.index'" @click="isVisibilityCreate" class="btn btn-success whitespace-nowrap">Add cat...</button>
-                    <button v-else @click="isVisibilityCreate" class="btn btn-success whitespace-nowrap">Add sub...</button>
+                <div class="flex items-center space-x-2">
+                    <input :placeholder="this.$route.name == 'dashboard.categories.index' ? 'Search category' : 'Search subcategory'" class="bg-gray-700 text-white placeholder-gray-400 border border-gray-600 rounded px-2 py-1 w-40" />
+                    <button @click="isVisibilityCreate" class="bg-blue-500 hover:bg-blue-700 text-white px-3 py-1 rounded">
+                        {{ this.$route.name == "dashboard.categories.index" ? "Add Cat" : "Add Sub" }}
+                    </button>
                 </div>
             </div>
         </div>

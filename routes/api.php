@@ -3,6 +3,7 @@
 use App\Http\Controllers\dashboard\CategoryController;
 use App\Http\Controllers\dashboard\FoodController;
 use App\Http\Controllers\LanguageController;
+use App\Http\Controllers\PayloadController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -32,3 +33,12 @@ Route::apiResource('foods', FoodController::class);
 
 
 Route::delete('/delete-category/{id}', [CategoryController::class, 'destroy']);
+
+
+
+
+
+
+
+Route::get('/generate-payload', [PayloadController::class, 'createPayload']);
+
