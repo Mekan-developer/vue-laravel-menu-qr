@@ -4,15 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Translatable\HasTranslations;
 
 class foodSize extends Model
 {
-    use HasFactory, HasTranslations;
+    use HasFactory;
+    protected $table = 'food_sizes';
 
     protected $fillable = ['name', 'food_id', 'price'];
-
-    public $translatable = ['name'];
 
     public $timestamps = false;
 

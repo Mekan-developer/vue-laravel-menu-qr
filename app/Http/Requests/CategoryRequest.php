@@ -32,7 +32,7 @@ class CategoryRequest extends FormRequest
         }
 
         if ($this->image_require) {
-            $rules['image'] = 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'; //required bolmalymy ya nullable?????
+            $rules['image'] = 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048';
         }
 
         return $rules;

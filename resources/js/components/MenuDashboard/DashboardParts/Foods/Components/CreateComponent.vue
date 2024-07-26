@@ -1,14 +1,14 @@
 <template>
-    <div class="category-create flex flex-col justify-center items-center absolute left-0 top-0 z-[9999] w-full h-full bg-[#11101d63] px-4">
-        <div class="bg-white rounded-md px-4 py-2 min-w-[740px] min-h-[460px] max-h-[calc(100%-10px)]">
-            <div class="m-2 p-1 overflow-hidden overflow-y-auto no-scrollbar max-h-[calc(100%-56px)]">
-                <div class="flex justify-end w-full mb-1">
-                    <div class="flex-grow-1 text-center text-[#216ccf] text-[16px] font-bold">Category add</div>
-                    <i @click="$emit('popupDeleteCreate')" class="bx bx-x text-[24px] p-2 cursor-pointer"></i>
+    <div class="category-create flex flex-col justify-center items-center absolute left-0 top-0 z-50 w-full h-full bg-gray-800 bg-opacity-75 px-4">
+        <div class="bg-gray-900 rounded-lg px-6 py-4 shadow-lg">
+            <div class="m-2 p-1">
+                <div class="flex justify-between items-center mb-4">
+                    <div class="text-center text-blue-500 text-xl font-semibold">Food Add</div>
+                    <i @click="$emit('popupDeleteCreate')" class="bx bx-x text-2xl p-2 cursor-pointer text-white hover:text-red-500"></i>
                 </div>
-                <div class="flex justify-start gap-2 mb-2">
+                <div class="flex justify-start gap-2 mb-4">
                     <div class="w-full">
-                        <select class="form-select cursor-pointer" aria-label="Default select example" @change="childValNull" v-model="selectedParentCategory">
+                        <select class="form-select cursor-pointer bg-gray-200 border border-gray-400 text-gray-800 rounded p-2 focus:outline-none focus:border-blue-500" aria-label="Default select example" @change="childValNull" v-model="selectedParentCategory">
                             <option :value="null">Choose category</option>
                             <option v-for="parent in parentCategories" :key="parent.id" :value="parent.id">
                                 {{ parent.name[language] }}
@@ -16,115 +16,75 @@
                         </select>
                     </div>
                     <div class="w-full" v-if="!(filteredChildCategories.length === 0)">
-                        <select class="form-select cursor-pointer" aria-label="Default select example" v-model="selectedChildCategory">
-                            <option :value="null">select sub category</option>
+                        <select class="form-select cursor-pointer bg-gray-200 border border-gray-400 text-gray-800 rounded p-2 focus:outline-none focus:border-blue-500" aria-label="Default select example" v-model="selectedChildCategory">
+                            <option :value="null">Select sub category</option>
                             <option v-for="child in filteredChildCategories" :key="child.id" :value="child.id">
                                 {{ child.name[language] }}
                             </option>
                         </select>
                     </div>
                 </div>
-
-                <div class="flex flex-wrap justify-center gap-4">
-                    <div class="flex-grow-1 form-floating mb-1 overflow-hidden input-sm" v-for="(lang, code) in languages" :key="lang.index">
-                        <input type="text" v-model="name[code]" class="form-control input-sm over" :id="'input-' + code" placeholder="name" />
-                        <label :for="'input-' + code" class="leading-[32px] pl-3 text-gray-500">category name {{ code }}</label>
+                <div class="flex flex-wrap justify-center gap-4 mb-4">
+                    <div class="flex-grow form-floating mb-2 overflow-hidden" v-for="(lang, code) in languages" :key="lang.index">
+                        <input type="text" v-model="name[code]" class="form-control bg-gray-200 border border-gray-400 text-gray-800 rounded p-2 focus:outline-none focus:border-blue-500" :id="'input-' + code" placeholder="name" />
+                        <label :for="'input-' + code" class="leading-[20px] pl-1 text-gray-500">Name {{ code }}</label>
                     </div>
                 </div>
-                <div>
-                    <div class="mb-3">
-                        <label for="formFileMultiple" class="form-label p-0 m-0">Menu image</label>
-                        <input class="form-control" type="file" id="formFileMultiple" multiple />
-                    </div>
+                <div class="mb-4">
+                    <label for="formFileMultiple" class="form-label text-white">Menu Image</label>
+                    <input class="form-control bg-gray-200 border border-gray-400 text-gray-800 rounded p-2 focus:outline-none focus:border-blue-500" type="file" id="formFileMultiple" @change="onChange" multiple />
                 </div>
-                <div class="flex gap-1">
-                    <div v-if="onePriceActive" class="mb-3">
-                        <label for="price" class="form-label p-0 m-0 text-[#0d6efd]">price ( {{ foodSizes + 1 }} )</label>
-                        <input class="form-control" v-model="price[0]" type="number" id="price" placeholder="price" />
+                <div class="flex gap-4 mb-4 text-blue-500">
+                    <div v-if="this.isEmpty(sizeData)" class="w-full">
+                        <label for="price" class="form-label">Price</label>
+                        <input class="form-control bg-gray-200 border border-gray-400 text-gray-800 rounded p-2 focus:outline-none focus:border-blue-500" v-model="price" type="number" id="price" placeholder="Price" />
                     </div>
-                    <div class="flex gap-1 mb-3 w-auto flex-grow">
+                    <div class="flex gap-4 w-full">
                         <div class="flex-grow">
-                            <label for="discount" class="form-label p-0 m-0">discount</label>
-                            <input class="form-control" type="number" id="discount" placeholder="discount" />
+                            <label for="discount" class="form-label">Discount</label>
+                            <input class="form-control bg-gray-200 border border-gray-400 text-gray-800 rounded p-2 focus:outline-none focus:border-blue-500" v-model="discount" type="number" id="discount" placeholder="Discount" />
                         </div>
-                        <div>
-                            <div class="flex justify-between">
-                                <label for="type" class="form-label p-0 m-0"></label>
-                                <div class="flex">
-                                    <div>( {{ foodSizes + 1 }} )</div>
-                                    <div @click="addFoodSize" class="w-[24px] h-[24px] text-center bg-[#2e63f7] text-white rounded-sm cursor-pointer">+</div>
-                                </div>
-                            </div>
 
-                            <select class="form-select mb-1 cursor-pointer" aria-label="Default select example" name="" id="type">
-                                <option class="" value="">tmt</option>
-                                <option value="">%</option>
+                        <div>
+                            <div class="flex items-center gap-2 mb-1">
+                                <label class="switch">
+                                    <input type="checkbox" v-model="addFoodSizeActive" />
+                                    <span class="slider round"></span>
+                                </label>
+                                <i v-if="this.isEmpty(sizeData)" class="bx bxs-x-circle text-red-500 text-[26px]"></i>
+                                <i v-if="!this.isEmpty(sizeData)" class="bx bx-check-square text-green-500 text-[26px]"></i>
+                                <div class="flex-nowrap">+Size</div>
+                            </div>
+                            <select class="form-select bg-gray-200 border border-gray-400 text-gray-800 rounded p-2 focus:outline-none focus:border-blue-500" v-model="discount_unit">
+                                <option selected value="manat">TMT</option>
+                                <option value="percent">%</option>
                             </select>
                         </div>
                     </div>
                 </div>
-                <div :class="{ multy_size_style: changeClass, food_size_height: onePriceActive }" class="bg-gray-400 rounded-md overflow-hidden">
-                    <div class="flex justify-between relative -top-2 -left-2 z-50 bg-white w-[calc(100%_+_16px)]">
-                        <span class="">multy size</span>
-                    </div>
-                    <div class="overflow-hidden overflow-y-auto h-[calc(100%_-_22px)] no-scrollbar pb-2 mb-4 rounded-md">
-                        <div class="py-1 mb-2" v-for="(size, index) in foodSizes + 1" :key="size">
-                            <div class="flex justify-end w-full mb-1">
-                                <span v-if="index == 0" class="text-white mr-8">( {{ index + 1 }} )</span>
-                                <span v-if="index != 0" class="text-white mr-1">( {{ index + 1 }} )</span>
-                                <div @click="removeFoodSize" v-if="size != 1" class="w-[24px] h-[24px] leading-[24px] text-center bg-[#2e63f7] text-white rounded-sm cursor-pointer text-[20px]">-</div>
-                            </div>
-
-                            <div class="flex flex-wrap justify-center gap-4">
-                                <div class="flex-grow-1 form-floating mb-1 overflow-hidden" v-for="(lang, code) in languages" :key="lang.index">
-                                    <input type="text" :name="foodSizeName[code]" class="form-control bg-gray-200" :id="'input-' + code" placeholder="name@example.com" />
-                                    <label :for="'input-' + code" class="leading-[32px] pl-3 text-gray-500">category name {{ code }}</label>
-                                </div>
-                            </div>
-
-                            <div class="px-1">
-                                <label for="price" class="form-label text-white m-0">price</label>
-                                <input v-model="price[size]" class="form-control gb-gray-200 m-0" type="number" id="price" placeholder="price" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex justify-between">
-                    <div class="mb-4 flex gap-2 text-center items-center">
+                <div class="flex justify-between items-center mb-4">
+                    <div class="flex items-center gap-2">
                         <label class="switch">
                             <input type="checkbox" v-model="isActive" />
                             <span class="slider round"></span>
                         </label>
-                        <span>is active</span>
-                    </div>
 
-                    <div class="mb-4 flex gap-2 text-center items-center">
+                        <span class="text-white">Is Active</span>
+                    </div>
+                    <div class="flex items-center gap-2">
                         <label class="switch">
                             <input type="checkbox" v-model="descriptionActive" />
                             <span class="slider round"></span>
                         </label>
-                        <span>description</span>
+                        <i v-if="this.isEmpty(descriptionData)" class="bx bxs-x-circle text-red-500 text-[26px]"></i>
+                        <i v-if="!this.isEmpty(descriptionData)" class="bx bx-check-square text-green-500 text-[26px]"></i>
+                        <span class="text-white">Description</span>
                     </div>
                 </div>
-                <div v-if="descriptionActive" class="flex justify-center items-center absolute z-50 top-0 left-0 w-full h-full bg-[#818181cc]">
-                    <div class="flex flex-col gap-2 bg-gray-200 p-4 rounded-lg">
-                        <div class="flex">
-                            <div class="flex-grow-1 text-center">Add description</div>
-                            <div class="flex-end pb-1">
-                                <i @click="descriptionActive = false" class="bx bx-x text-[24px] p-2 cursor-pointer"></i>
-                            </div>
-                        </div>
-                        <div v-for="(lang, code) in languages" :key="lang.index">
-                            <textarea :name="description[code]" id="" class="min-w-[400px] pl-1"> </textarea>
-                        </div>
-
-                        <button class="btn btn-primary" type="button">save</button>
-                    </div>
-                </div>
-
-                <div class="d-grid gap-2">
-                    <button class="btn btn-primary" type="button">Save</button>
+                <description-component v-if="descriptionActive" :languages="languages" @updateDescActVal="updateDescActVal" @descriptionDataFun="descriptionDataFun" :descriptionData="descriptionData"></description-component>
+                <size-component v-if="addFoodSizeActive" :languages="languages" @cancelSize="cancelFoodSize" @removeSizeData="removeSizeData" @sizeDataFun="sizeDataFun" :sizeData="sizeData"></size-component>
+                <div class="mt-4">
+                    <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded w-full" type="button" @click.prevent="storeFoods">Save</button>
                 </div>
             </div>
         </div>
@@ -133,8 +93,11 @@
 
 <script>
 import axios from "axios";
+import DescriptionComponent from "./components/DescriptionComponent.vue";
+import SizeComponent from "./components/SizeComponent.vue";
 
 export default {
+    components: { DescriptionComponent },
     props: {
         language: String,
         languages: Object,
@@ -142,29 +105,26 @@ export default {
 
     data() {
         const name = {};
-        const description = {};
 
         return {
             name: name,
-            description: description,
-            foodSizeName: {},
-            foodSizes: 0,
-
-            price: {
-                0: null,
-            },
+            image: [],
+            price: null,
+            discount: null,
+            discount_unit: "manat",
             isActive: true,
             // category
             selectedParentCategory: null,
             selectedChildCategory: null,
             parentCategories: [],
             childCategories: [],
-            selectedParentCategory: null,
-            selectedChildCategory: null,
             // category
             onePriceActive: true,
             descriptionActive: false,
-            changeClass: false,
+            addFoodSizeActive: false,
+
+            descriptionData: {},
+            sizeData: [],
         };
     },
     created() {
@@ -176,51 +136,60 @@ export default {
                 this.name[code] = "";
             });
         },
-        input_names() {
-            Object.keys(this.languages).forEach((code) => {
-                this.description[code] = "";
-            });
-        },
-        foodSizeAdd() {
-            Object.keys(this.languages).forEach((code) => {
-                if (foodSizes > 0) this.reqursiveFunc(this.foodSizes, code);
-            });
-        },
-        reqursiveFunc(id, code) {
-            let size_id = id;
-            this.foodSizeName[size_id][code] = "";
-            size_id--;
-            if (size_id > 0) this.reqursiveFunc(size_id, code);
-            else return;
-        },
         getCategories() {
             axios.get("/api/food-create").then((res) => {
-                console.log(res);
                 this.childCategories = res.data.child;
                 this.parentCategories = res.data.parent;
             });
         },
         storeFoods() {
             let formData = new FormData();
-            formData.append();
-            axios.post("/api/foods", formData);
+            if (this.image.length > 0) Object.keys(this.image).forEach((key) => formData.append("image[]", this.image[key]));
+            formData.append("name", JSON.stringify(this.name));
+            formData.append("description", JSON.stringify(this.descriptionData));
+            formData.append("category_id", this.selectedChildCategory ? this.selectedChildCategory : this.selectedParentCategory);
+            formData.append("discount", this.discount);
+            formData.append("discount_unit", this.discount_unit);
+            formData.append("is_active", JSON.stringify(this.isActive));
+            formData.append("food_sizes", JSON.stringify(this.sizeData));
+            formData.append("price", this.price);
+
+            axios.post("/api/foods", formData).then((res) => {
+                console.log(res);
+            });
         },
         childValNull() {
             this.selectedChildCategory = null;
         },
-        addFoodSize() {
-            this.onePriceActive = false;
-            this.foodSizes++;
-            this.changeClass = true;
+        onChange(e) {
+            this.image = e.target.files;
         },
-        removeFoodSize() {
-            if (this.foodSizes > 0) {
-                this.foodSizes--;
+        cancelFoodSize() {
+            this.addFoodSizeActive = false;
+        },
+        updateDescActVal() {
+            this.descriptionActive = false;
+        },
+
+        descriptionDataFun(data) {
+            this.descriptionData = {};
+            if (!this.isEmpty(data)) {
+                this.descriptionData = data;
             }
-            if (this.foodSizes === 0) {
-                this.onePriceActive = true;
-                this.changeClass = false;
-            }
+            this.descriptionActive = false;
+        },
+
+        sizeDataFun(data) {
+            data.forEach((item, index) => {
+                this.sizeData[index] = item;
+            });
+            this.cancelFoodSize();
+        },
+        removeSizeData() {
+            this.sizeData.pop();
+        },
+        isEmpty(obj) {
+            return Object.keys(obj).length === 0;
         },
     },
     computed: {
@@ -228,24 +197,15 @@ export default {
             return this.childCategories.filter((child) => child.parent_id === this.selectedParentCategory);
         },
     },
+    components: {
+        DescriptionComponent,
+        SizeComponent,
+    },
 };
 </script>
 
 <style>
 .category-create {
     color: #0d6efd;
-}
-.no-scrollbar::-webkit-scrollbar {
-    display: none;
-}
-
-.multy_size_style {
-    @apply p-2 mb-1;
-    height: 300px;
-    transition: all 1s ease;
-}
-.food_size_height {
-    height: 0;
-    transition: all 1s ease;
 }
 </style>

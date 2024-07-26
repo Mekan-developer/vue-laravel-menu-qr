@@ -1,34 +1,37 @@
 <template>
-    <div class="manual-style flex flex-col justify-center items-center absolute left-0 top-0 z-[9999] w-full h-full bg-[#11101d63] px-16">
-        <div class="bg-white rounded-lg p-4">
-            <div class="flex justify-end w-full mb-4">
-                <div class="flex-grow-1 text-center font-bold text-[#216ccf] text-[16px]">Category add</div>
-                <i @click="$emit('popupDeleteCreate')" class="bx bx-x text-[24px] p-2 cursor-pointer"></i>
+    <div class="flex justify-center items-center absolute z-50 top-0 left-0 w-full h-full bg-[#818181cc]">
+        <div class="flex flex-col gap-4 bg-gray-800 px-6 py-4 rounded-lg relative shadow-lg max-w-md w-full">
+            <div class="absolute top-2 right-2">
+                <i @click="$emit('popupDeleteCreate')" class="bx bx-x text-2xl p-2 cursor-pointer text-white hover:text-red-500"></i>
             </div>
+            <div class="text-center text-white text-xl font-semibold mb-1">Category Add</div>
+
             <form @submit.prevent="store">
-                <div class="flex flex-wrap justify-center gap-4">
-                    <div v-for="(lang, code) in languages" :key="code" class="flex-grow-1 form-floating mb-3 overflow-hidden">
-                        <input type="text" v-model="name[code]" class="form-control over" :id="'input-' + code" placeholder="name@example.com" />
-                        <label :for="'input-' + code">name of category {{ code }}</label>
+                <div class="w-full max-h-[300px] overflow-hidden overflow-y-auto no-scrollbar box-shad relative">
+                    <div class="space-y-1 mt-6 mb-2">
+                        <div class="flex flex-wrap justify-center gap-4 mt-2">
+                            <div class="flex-grow form-floating mb-2" v-for="(lang, code) in languages" :key="code">
+                                <input type="text" v-model="name[code]" class="form-control bg-gray-200 border border-gray-400 text-gray-800 rounded p-2 focus:outline-none focus:border-blue-500" :id="'input-' + code" placeholder="Category name" />
+                                <label :for="'input-' + code" class="leading-[20px] pl-1 text-gray-500">Name {{ code }}</label>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div>
-                    <div class="mb-3">
-                        <label for="formFileMultiple" class="form-label">Menu image</label>
-                        <input class="form-control" type="file" @change="onChange" id="formFileMultiple" />
-                    </div>
+
+                <div class="mb-4">
+                    <label for="formFileMultiple" class="block mb-2 text-white">Menu image</label>
+                    <input type="file" @change="onChange" id="formFileMultiple" class="bg-gray-200 border border-gray-400 text-gray-800 rounded p-2 focus:outline-none focus:border-blue-500 w-full" />
                 </div>
-                <div class="mb-4 flex gap-2 text-center items-center">
+
+                <div class="flex items-center gap-2 mb-2">
                     <label class="switch">
                         <input type="checkbox" v-model="isActive" />
                         <span class="slider round"></span>
                     </label>
-                    <span>is active</span>
+                    <span class="text-white">Is Active</span>
                 </div>
 
-                <div class="d-grid gap-2">
-                    <button class="btn btn-primary" type="submit">Save</button>
-                </div>
+                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded w-full">Save</button>
             </form>
         </div>
     </div>

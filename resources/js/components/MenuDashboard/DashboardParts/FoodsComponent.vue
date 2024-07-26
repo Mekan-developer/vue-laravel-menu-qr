@@ -1,12 +1,10 @@
 <template>
-    <div>
-        <div class="flex justify-end bg-white border-b-2 border-gray-300">
+    <div class="flex flex-col h-full">
+        <div class="flex justify-end bg-white border-b-2 border-gray-700">
             <div class="flex gap-4 h-full items-center mr-2 p-2">
-                <div>
-                    <input class="form-control" type="text" placeholder="search food" />
-                </div>
-                <div>
-                    <button @click="isVisibilityCreate" class="btn btn-success whitespace-nowrap">Add Food</button>
+                <div class="flex items-center space-x-2">
+                    <input class="bg-gray-700 text-white placeholder-gray-400 border border-gray-600 rounded px-2 py-1 w-40" type="text" placeholder="search food" />
+                    <button @click="isVisibilityCreate" class="bg-blue-500 hover:bg-blue-700 text-white px-3 py-1 rounded">Add Food</button>
                 </div>
             </div>
         </div>
