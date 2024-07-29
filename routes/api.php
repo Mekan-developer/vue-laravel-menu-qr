@@ -15,11 +15,8 @@ Route::get('/user', function (Request $request) {
 
 
 Route::get('/change-lang', [LanguageController::class, 'changeLang']);
-
 Route::get('/get-locale', [LanguageController::class, 'getLocale']);
-
 Route::get('/welcome-message', [LanguageController::class, 'welcomeMessage']);
-
 Route::get('/languages', [LanguageController::class, 'language']);
 
 Route::get('/get-categories', [CategoryController::class, 'index']);

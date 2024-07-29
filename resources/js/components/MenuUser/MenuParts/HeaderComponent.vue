@@ -7,8 +7,9 @@
                 </div>
                 <div class="restaurant-name">wagamana</div>
             </div>
-            <button @click="popup" class="lang">
-                <button class="lang-button btn">{{ lang }}</button>
+            <button @click="popup" class="lang flex items-center space-x-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                <span>{{ lang }}</span>
+                <i class="bx bx-globe"></i>
             </button>
         </div>
         <div class="row-two">

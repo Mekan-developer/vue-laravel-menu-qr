@@ -23,7 +23,8 @@ class SizeRequest extends FormRequest
     {
         $this['food_sizes'] = json_decode($this->food_sizes);
         return [
-            'food_sizes' => 'nullable|array'
+            'food_sizes' => 'nullable|array',
+            'price' => 'nullable|numeric|min:1'
         ];
     }
 }
