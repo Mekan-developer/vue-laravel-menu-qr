@@ -6,22 +6,29 @@
             </div>
             <div class="text-center text-white text-xl font-semibold mb-1">Add food size</div>
             <div class="flex gap-2 justify-end -mb-2">
-                <button @click="removeFoodSize" v-if="foodSizes > 2" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">- {{ foodSizes }} Remove</button>
+                <button @click="removeFoodSize" v-if="foodSizes > 1" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">- {{ foodSizes }} Remove</button>
                 <button @click="addFoodSize" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">+ Add Size</button>
             </div>
             <div class="w-full max-h-[300px] overflow-hidden overflow-y-auto no-scrollbar box-shad relative">
-                <div class="space-y-1 mt-6 mb-2" v-for="size in foodSizes" :key="size">
-                    <div class="flex flex-wrap justify-center gap-4 mt-2">
-                        <div class="flex-grow form-floating mb-2" v-for="(lang, code) in languages" :key="lang.index">
-                            <input type="text" v-model="foodSizeName[size][code]" class="form-control bg-gray-200 border border-gray-400 text-gray-800 rounded p-2 focus:outline-none focus:border-blue-500" :id="'input-' + size + code" placeholder="Category name" />
-                            <label :for="'input-' + size + code" class="leading-[32px] pl-3 text-gray-500">Category name {{ code }} </label>
+                <div class="space-y-4 mt-6 mb-2" v-for="size in foodSizes" :key="size">
+                    <div class="p-4 border border-gray-300 rounded-lg shadow-md bg-white">
+                        <div class="flex flex-wrap justify-center gap-4 mt-2">
+                            <div class="flex-grow form-floating mb-2" v-for="(lang, code) in languages" :key="lang.index">
+                                <input type="text" v-model="foodSizeName[size][code]" class="inputStyle form-control" :id="'input-' + size + code" placeholder="Category name" />
+                                <label :for="'input-' + size + code" class="leading-[32px] pl-3 text-gray-500">Category name {{ code }} </label>
+                                <div v-if="errors[size] && errors[size][code]" class="text-red-500">{{ errors[size][code] }}</div>
+                            </div>
+                        </div>
+                        <div>
+                            <input v-model="prices[size]" class="inputStyle form-control" type="number" :placeholder="'price ' + size" />
+                            <div v-if="priceErrors[size]" class="text-red-500">{{ priceErrors[size] }}</div>
                         </div>
                     </div>
-                    <div>
-                        <input v-model="prices[size]" class="form-control bg-gray-200 border border-gray-400 text-gray-800 rounded p-2 focus:outline-none focus:border-blue-500" type="number" :placeholder="'price ' + size" />
-                    </div>
                 </div>
-                <div class="sticky bottom-0 w-full h-2" style="box-shadow: -8px 5px 20px rgba(255, 255, 125, 0.7)"></div>
+
+                <div class="sticky bottom-0 w-full h-10 bg-gradient-to-t from-gray-100 to-transparent flex items-center justify-center">
+                    <div class="w-full h-full" style="box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1)"></div>
+                </div>
             </div>
 
             <button @click.prevent="store" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded w-full" type="submit">Save</button>
@@ -37,12 +44,14 @@ export default {
         languages: Object,
         sizeData: Array,
     },
-    emits: ["cancelSize", "sizeDataFun"],
+    emits: ["cancelSize", "sizeDataFun", "removeSizeData"],
     data() {
         return {
             foodSizes: 2,
             foodSizeName: [],
             prices: [],
+            errors: {},
+            priceErrors: {},
         };
     },
     created() {
@@ -52,10 +61,22 @@ export default {
         }
     },
     methods: {
+        validateForm() {
+            this.errors = {};
+            this.priceErrors = {};
+            for (let i = 1; i <= this.foodSizes; i++) {
+                for (const code in this.languages) {
+                    if (!this.foodSizeName[i][code]) {
+                        if (!this.errors[i]) this.errors[i] = {};
+                        this.errors[i][code] = `Food size name ${code} is required.`;
+                    }
+                }
+                if (!this.prices[i]) this.priceErrors[i] = "Food's price is required.";
+            }
+        },
         initializeFoodSizeName() {
             if (this.sizeData.length > 0) {
                 for (let i = 0; i < this.sizeData.length; i++) {
-                    this.foodSizeName[i + 1] = {};
                     this.foodSizeName[i + 1] = this.sizeData[i].name;
                     this.prices[i + 1] = this.sizeData[i].price;
                 }
@@ -88,26 +109,34 @@ export default {
                 this.sizeData.pop();
                 this.foodSizes--;
                 this.prices = [];
+            } else if ((this.foodSizes = 2)) {
+                this.$emit("removeSizeData");
             }
 
             this.initializeFoodSizeName();
         },
         store() {
-            let data = [];
-            for (let i = 1; i < this.prices.length; i++) {
-                let test = {
-                    name: this.foodSizeName[i],
-                    price: this.prices[i],
-                };
-                data.push(test);
+            this.validateForm();
+            if (Object.keys(this.errors).length === 0 && Object.keys(this.priceErrors).length === 0) {
+                let data = [];
+                for (let i = 1; i < this.prices.length; i++) {
+                    let test = {
+                        name: this.foodSizeName[i],
+                        price: this.prices[i],
+                    };
+                    data.push(test);
+                }
+                this.$emit("sizeDataFun", data);
             }
-            this.$emit("sizeDataFun", data);
         },
     },
 };
 </script>
 
 <style>
+.inputStyle form-control {
+    @apply bg-gray-200 border border-gray-400 text-gray-800 rounded p-2 focus:outline-none focus:border-blue-500;
+}
 .no-scrollbar::-webkit-scrollbar {
     display: none;
 }

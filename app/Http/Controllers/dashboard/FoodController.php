@@ -7,6 +7,7 @@ use App\Http\Requests\FoodRequest;
 use App\Http\Requests\ImageRequest;
 use App\Http\Requests\SizeRequest;
 use App\Http\Resources\Food_categoryResource;
+use App\Http\Resources\FoodResource;
 use App\Models\Category;
 use App\Models\Food;
 use App\Models\foodSize;
@@ -20,7 +21,9 @@ class FoodController extends Controller
      */
     public function index()
     {
-        //
+        $foods = FoodResource::collection(Food::with('category')->with('images')->with('sizes')->get());
+
+        return response()->json($foods, 200);
     }
 
     /**
@@ -58,7 +61,7 @@ class FoodController extends Controller
 
 
         $sizeData = $sizeRequest->validated();
-        if ($sizeRequest->has("food_sizes")) {
+        if (!is_null($sizeData["food_sizes"])) {
             foreach ($sizeData['food_sizes'] as $value) {
                 $size_data = [
                     'name' => json_encode($value->name, true),
@@ -67,13 +70,13 @@ class FoodController extends Controller
                 ];
                 foodSize::create($size_data);
             }
+        } else {
+            $size_data = [
+                'food_id' => $food->id,
+                'price' => $sizeRequest->price,
+            ];
+            foodSize::create($size_data);
         }
-
-        // $data2 = [
-        //     'food_id' => $food->id,
-        //     'price' => $request->price,
-        // ];
-        // foodSize::create($data2);
 
         return response()->json(['message' => 'foods created successfully']);
     }
@@ -105,8 +108,13 @@ class FoodController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $food = Food::findOrFail($id);
+        if ($food->image)
+            $this->removeFile($food->image, 'foods');
+        $food->delete();
+
+        return response()->json(['message' => 'Foods deleted successfully']);
     }
 }

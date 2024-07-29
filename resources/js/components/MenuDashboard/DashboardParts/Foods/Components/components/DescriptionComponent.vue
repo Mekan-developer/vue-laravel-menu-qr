@@ -8,7 +8,8 @@
                 </div>
             </div>
             <div class="space-y-4" v-for="(lang, code) in languages" :key="lang.index">
-                <textarea v-model="description[code]" class="min-w-[400px] h-[80px] p-2 bg-gray-200 border border-gray-400 text-gray-800 rounded focus:outline-none focus:border-blue-500" :placeholder="`Enter description ` + code"></textarea>
+                <textarea v-model="description[code]" class="min-w-[400px] h-[80px] p-2 bg-gray-200 border border-gray-400 text-gray-800 rounded focus:outline-none focus:border-blue-500" :placeholder="`Enter description ` + code"></textarea><br />
+                <span class="text-red-600" v-if="errors.description[code]">{{ errors.description[code] }}</span>
             </div>
             <button @click.prevent="store" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded w-full mt-4" type="button">Save</button>
         </div>
@@ -26,6 +27,9 @@ export default {
     data() {
         return {
             description: {},
+            errors: {
+                description: {},
+            },
         };
     },
     created() {
@@ -34,14 +38,31 @@ export default {
         }
     },
     methods: {
+        validation() {
+            Object.keys(this.languages).forEach((key) => {
+                if (!this.description[key]) this.errors.description[key] = `Description ${key} is required.`;
+                else delete this.errors.description[key];
+            });
+        },
         store() {
             const description = {};
-            Object.keys(this.description).forEach((key) => {
+            var a = 0,
+                b = 0;
+            Object.keys(this.languages).forEach((key, index) => {
                 if (this.description[key]) {
+                    a++;
                     description[key] = this.description[key];
-                }
+                } else b++;
             });
-            this.$emit("descriptionDataFun", description);
+            if (a > 0 && b > 0) this.validation();
+            else
+                Object.keys(this.languages).forEach((key) => {
+                    delete this.errors.description[key];
+                });
+
+            if (this.isEmpty(this.errors.description)) {
+                this.$emit("descriptionDataFun", description);
+            }
         },
         isEmpty(obj) {
             return Object.keys(obj).length === 0;
