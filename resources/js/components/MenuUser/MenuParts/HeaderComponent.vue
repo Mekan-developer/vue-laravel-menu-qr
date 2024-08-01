@@ -1,30 +1,31 @@
 <template>
-    <header id="header" ref="removeClass" :class="dinamicClass" class="border-b-gray-200 border-b-2 pb-[10px]">
-        <div class="row-one">
-            <div class="restaurant-name-logo">
-                <div class="restaurant-logo">
-                    <img src="menu-icons/star.png" alt="" />
-                </div>
-                <div class="restaurant-name">wagamana</div>
+   <header id="header" ref="removeClass" :class="dinamicClass" class="border-b-gray-200 border-b-2 pb-[10px] bg-gray-200 shadow-bottom">
+    <div class="row-one">
+        <div class="restaurant-name-logo">
+            <div class="restaurant-logo">
+                <img src="menu-icons/star.png" alt="" />
             </div>
-            <button @click="popup" class="lang flex items-center space-x-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                <span>{{ lang }}</span>
-                <i class="bx bx-globe"></i>
-            </button>
+            <div class="restaurant-name">vue-menu</div>
         </div>
-        <div class="row-two">
-            <div class="categories">
-                <div v-for="category in categories" :key="category.id" @click="filterSubCategories(category.id)" class="category">
-                    <div :class="this.activeCatId === category.id ? 'activeCat' : ''" class="category-img rounded-lg p-1">
-                        <img :src="getImageSrc(category.image)" alt="" />
-                    </div>
-                    <div class="category-name">
-                        {{ category.name[currentLang] }}
-                    </div>
+        <button @click="popup" class="flex items-center px-4 py-2 space-x-2 font-bold text-white bg-gray-800 rounded lang hover:bg-gray-800">
+            <span>{{ lang }}</span>
+            <i class="bx bx-globe"></i>
+        </button>
+    </div>
+    <div class="row-two">
+        <div class="categories">
+            <div :class="this.activeCatId === category.id ? 'activeCat' : 'notActiveCat'" v-for="category in categories" :key="category.id" @click="filterSubCategories(category.id)" class="category">
+                <div class="rounded-sm category-img">
+                    <img :src="category.image" alt="" />
+                </div>
+                <div class="category-name">
+                    {{ category.name[currentLang] }}
                 </div>
             </div>
         </div>
-    </header>
+    </div>
+</header>
+
 </template>
 
 <script>
@@ -97,6 +98,7 @@ export default {
     display: flex;
     align-items: center;
     padding: 5px 20px;
+    @apply bg-gray-200;
 }
 .restaurant-name-logo {
     display: flex;
@@ -111,7 +113,6 @@ export default {
 .restaurant-name {
     font-size: 1.3rem;
     color: black;
-    font-size: 1.3rem;
     margin: 0;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -121,23 +122,31 @@ export default {
     width: fit-content;
 }
 .lang-button {
-    background-color: #f5f5f5;
-    color: #333333;
+    @apply bg-gray-800;
+    color: white;
     box-shadow: 1px 1px 3px #0000004d;
     padding: 4px 6px;
     border-radius: 99999px;
 }
 
 .row-two {
-    overflow-x: auto;
-    position: sticky;
-    top: 0;
+    @apply sticky top-0 overflow-x-auto bg-gray-200;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer and Edge */
+}
+
+.row-two::-webkit-scrollbar {
+    width: 0px; /* WebKit browsers */
+    background: transparent; /* Optional: Hide the background */
 }
 .categories {
     display: flex;
 }
 .activeCat {
-    background-color: #a08f8f3b;
+    @apply border border-[#1F2937];
+}
+.notActiveCat{
+    @apply border border-[#A08F8F3B];
 }
 .category {
     display: flex;
@@ -147,9 +156,25 @@ export default {
     margin: 0 5px;
     padding: 10px;
     cursor: pointer;
+    border-radius: 4px;
 }
 .category-img {
-    width: 40px;
-    height: auto;
+    width: 46px;
+    height: 46px;
+    overflow: hidden;
+}
+.category-img img{
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+}
+.shadow-bottom {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Customize the shadow size and color */
+}
+.category-name{
+    width: 80px; /* Set the width of the container */
+    white-space: nowrap; /* Prevent text from wrapping */
+    overflow: hidden; /* Hide text that overflows */
+    text-overflow: ellipsis;
 }
 </style>

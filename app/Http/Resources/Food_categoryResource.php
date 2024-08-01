@@ -17,6 +17,7 @@ class Food_categoryResource extends JsonResource
         $data = [
             'id' => $this->id,
             'name' => $this->getTranslations('name'),
+            'image' => $this->getImage(),
             'parent_id' => $this->parent_id,
         ];
         return $data;

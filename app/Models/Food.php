@@ -11,15 +11,7 @@ class Food extends Model
     use HasFactory, HasTranslations;
 
     protected $table = 'foods';
-    protected $fillable = [
-        'name',
-        'description',
-        'category_id',
-        'discount',
-        'discount_unit',
-        'order',
-        'is_active'
-    ];
+    protected $fillable = ['name','description','category_id','discount','discount_unit','order','is_active'];
     public $translatable = ['name'];
     public function category()
     {

@@ -4,9 +4,13 @@ namespace App\Http\Controllers\dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
+use App\Http\Resources\CategoryfoodResource;
 use App\Http\Resources\CategoryResource;
 
+use App\Http\Resources\Food_categoryResource;
+use App\Http\Resources\FoodResource;
 use App\Models\Category;
+use App\Models\Food;
 use Illuminate\Http\Request;
 
 
@@ -15,6 +19,7 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
+
     public function index(Request $req)
     {
 
@@ -53,7 +58,6 @@ class CategoryController extends Controller
             $fileName = $this->uploadFile($file, 'categories');
         }
         $data['image'] = $fileName;
-        // dd($request);
         Category::create($data);
     }
 

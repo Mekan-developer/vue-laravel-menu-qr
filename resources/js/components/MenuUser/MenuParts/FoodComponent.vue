@@ -1,6 +1,6 @@
 <template>
-    <div class="grid-container m-[10px]" v-if="foods">
-        <template v-for="food in foods" :key="food.id">
+    <div class="grid-container" v-if="foods">
+        <div class="p-1" v-for="food in foods" :key="food.id">
             <a href="#">
                 <div class="menu-product_item">
                     <div class="menu-product_item_toolbar">
@@ -15,17 +15,17 @@
                         </button>
                     </div>
                     <div class="menu-product_item_img">
-                        <img class="menu-product_item_img_full" :src="getImageSrc(food.image)" alt="Item image" decoding="async" />
+                        <img :src="food.image[0].image" alt="Item image" decoding="async"/>
                     </div>
                     <div class="menu-product_item_name_price py-1 px-[6px]">
                         <div class="menu-product_item_name text-overflow">
-                            <!-- {{ getTruncatedText(food.name[currentLang]) }} -->
+                            {{ getTruncatedText(food.name[currentLang]) }}
                         </div>
-                        <div class="menu-product_item_price no-wrap">{{ food.price }} $</div>
+                        <div class="menu-product_item_price no-wrap">{{ food.sizes[0].price }} Tmt</div>
                     </div>
                 </div>
             </a>
-        </template>
+        </div>
     </div>
 </template>
 
@@ -41,9 +41,6 @@ export default {
         currentLang: String,
     },
     methods: {
-        getImageSrc(image) {
-            return `/menu-icons/${image}`;
-        },
         getTruncatedText(foodName) {
             if (foodName.length > 25) {
                 return foodName.substring(0, 23) + "...";
@@ -58,9 +55,11 @@ export default {
 <style scoped>
 .grid-container {
     display: grid;
-    grid-template-columns: repeat(2, 50%);
-    gap: 10px 5px;
+    grid-template-columns: repeat(2, 48%);
+    gap: 10px 10px;
     padding-right: 3px;
+    justify-content: center; /* Center the grid within the container */
+    padding-top: 10px;
 }
 .menu-product_item {
     background-color: #a08f8f3b;
@@ -94,10 +93,14 @@ export default {
     stroke: none;
 }
 .menu-product_item_img {
-    height: 130px;
+    height: auto;
+    width: full; /* Ensure the width is also defined */
+    background-color: #be0707;
     aspect-ratio: 1/1;
     margin: auto;
     position: relative;
+    overflow: hidden; /* Ensure the overflow is hidden in the container */
+
 }
 .menu-product_item_img img {
     object-fit: cover;
@@ -107,9 +110,7 @@ export default {
     top: 0;
     left: 0;
 }
-img {
-    overflow: clip;
-}
+
 .menu-product_item_name_price {
     display: flex;
     justify-content: space-between;

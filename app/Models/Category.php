@@ -8,7 +8,7 @@ use Spatie\Translatable\HasTranslations;
 
 class Category extends Model
 {
-    use HasFactory, HasTranslations;
+    use HasFactory, HasTranslations; 
 
     protected $fillable = ['name', 'image', 'parent_id', 'is_active', 'order'];
     protected $casts = [
@@ -19,12 +19,16 @@ class Category extends Model
 
     public function children()
     {
-        return $this->hasMany(Category::class, 'parent_id', 'id');
+        return $this->hasMany(Category::class,'parent_id','id');
+    }
+    public function foods()
+    {
+        return $this->hasMany(Food::class,'category_id','id');
     }
 
     public function parent()
     {
-        return $this->belongsTo(Category::class, 'parent_id', 'id');
+        return $this->belongsTo(Category::class,'parent_id','id');
     }
 
     public function getImage()

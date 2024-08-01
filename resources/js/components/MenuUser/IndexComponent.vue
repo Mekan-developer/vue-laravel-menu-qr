@@ -2,8 +2,8 @@
     <div id="menu-page">
         <header-component ref="childComponent" @filterSubCategories="filterSubCategories" :activeCatId="activeCatId" :categories="categories" @toggleVisibility="toggleVisibility" :lang="langs[language]" :currentLang="language"></header-component>
         <section ref="scrollArea" @wheel="onWheel" @touchstart="onTouchStart" @touchmove="onTouchMove" @touchend="onTouchEnd" id="main-section" class="pb-[10px]">
-            <subcategory-component @filterFoods="filterFoods" :activeSubId="activeSubId" :subCategories="filteredSubCategories" :currentLang="language" ref="subCategory"></subcategory-component>
-            <food-component v-bind:foods="filteredFoods" :currentLang="language"></food-component>
+            <subcategory-component @filterFoods="filterFoods" :activeSubId="activeSubId" :subCategories="subCategories" :currentLang="language" ref="subCategory"></subcategory-component>
+            <food-component v-bind:foods="foods" :currentLang="language"></food-component>
         </section>
         <langpopup-component :visibility="isVisible" :langs="langs" @change-language="changeLanguage"></langpopup-component>
     </div>
@@ -14,6 +14,7 @@ import HeaderComponent from "./MenuParts/HeaderComponent.vue";
 import SubcategoryComponent from "./MenuParts/SubcategoryComponent.vue";
 import FoodComponent from "./MenuParts/FoodComponent.vue";
 import LangpopupComponent from "./MenuParts/LangpopupComponent.vue";
+import axios from "axios";
 
 export default {
     props: { language: String },
@@ -27,167 +28,30 @@ export default {
                 en: "english",
                 tm: "turkmen",
             },
-            categories: [
-                {
-                    id: 1,
-                    name: {
-                        en: "breakfast",
-                        tm: "ertirlik",
-                    },
-                    image: "img1.png",
-                    subCategories: [],
-                    foods: [
-                        {
-                            id: 1,
-                            name: {
-                                en: "eggs",
-                                tm: "yumurtga",
-                            },
-                            image: "foodIMG.png",
-                            price: 25,
-                        },
-                        {
-                            id: 2,
-                            name: {
-                                en: "eggs",
-                                tm: "yumurtga",
-                            },
-                            image: "foodIMG.png",
-                            price: 52,
-                        },
-                    ],
-                },
-                {
-                    id: 2,
-                    name: {
-                        en: "Popular",
-                        tm: "meshur naharlar",
-                    },
-                    image: "img1.png",
-                    subCategories: [
-                        {
-                            id: 5,
-                            name: {
-                                en: "subCategory 2.1",
-                                tm: "subCategory 2.1",
-                            },
-                            image: "img.png",
-                            foods: [
-                                {
-                                    id: 13,
-                                    name: {
-                                        en: "food in sub",
-                                        tm: "food in sub tm",
-                                    },
-                                    image: "img2.png",
-                                    price: 250,
-                                },
-                            ],
-                        },
-                        {
-                            id: 6,
-                            name: {
-                                en: "subCategory 2.1",
-                                tm: "subCategory 2.1",
-                            },
-                            image: "img.png",
-                            foods: [
-                                {
-                                    id: 13,
-                                    name: {
-                                        en: "food in sub",
-                                        tm: "food in sub tm",
-                                    },
-                                    image: "img2.png",
-                                    price: 250,
-                                },
-                                {
-                                    id: 13,
-                                    name: {
-                                        en: "food in sub",
-                                        tm: "food in sub tm",
-                                    },
-                                    image: "img2.png",
-                                    price: 250,
-                                },
-                                {
-                                    id: 13,
-                                    name: {
-                                        en: "food in sub",
-                                        tm: "food in sub tm",
-                                    },
-                                    image: "img2.png",
-                                    price: 250,
-                                },
-                                {
-                                    id: 13,
-                                    name: {
-                                        en: "food in sub",
-                                        tm: "food in sub tm",
-                                    },
-                                    image: "img2.png",
-                                    price: 250,
-                                },
-                                {
-                                    id: 13,
-                                    name: {
-                                        en: "food in sub",
-                                        tm: "food in sub tm",
-                                    },
-                                    image: "img2.png",
-                                    price: 250,
-                                },
-                                {
-                                    id: 13,
-                                    name: {
-                                        en: "food in sub",
-                                        tm: "food in sub tm",
-                                    },
-                                    image: "img2.png",
-                                    price: 88,
-                                },
-                                {
-                                    id: 13,
-                                    name: {
-                                        en: "food in sub",
-                                        tm: "food in sub tm",
-                                    },
-                                    image: "img2.png",
-                                    price: 88,
-                                },
-                                {
-                                    id: 13,
-                                    name: {
-                                        en: "food in sub",
-                                        tm: "food in sub tm",
-                                    },
-                                    image: "img2.png",
-                                    price: 88,
-                                },
-                                {
-                                    id: 13,
-                                    name: {
-                                        en: "food in sub",
-                                        tm: "food in sub tm",
-                                    },
-                                    image: "img2.png",
-                                    price: 88,
-                                },
-                            ],
-                        },
-                    ],
-                    foods: [],
-                },
-            ],
-            filteredSubCategories: [],
-            filteredFoods: [],
+            categories:[],
+            subCategories: [],
+            subCategoriesAll: [],
+            foodsAll: [],
+            foods: [],
         };
     },
     mounted() {
-        this.filterSubCategories(this.minCategoryId);
     },
     emits: ["changeLanguage"],
+    created(){
+        this.getCategories();        
+        console.log('test1');
+        console.log(this.categories);
+    },
     methods: {
+        getCategories(){
+            axios.get('/api/category-foods').then(res => {
+                this.categories = res.data.parent;
+                this.subCategoriesAll = res.data.child;
+                this.foodsAll = res.data.foods;
+                this.filterSubCategories()
+            });
+        },
         toggleVisibility() {
             this.isVisible = !this.isVisible;
         },
@@ -224,34 +88,30 @@ export default {
         },
         // mouse scroll yada phone-de finger bilen scrol edeninde ishleyan funcsiya end
         filterSubCategories(categoryId = null) {
-            const category = this.categories.find((cat) => cat.id === categoryId);
-            this.activeCatId = categoryId;
-            if (category) {
-                this.filteredSubCategories = category.subCategories;
-                this.filteredFoods = [];
-                if (this.filteredSubCategories.length === 0) {
-                    this.filteredFoods = category.foods;
-                } else {
-                    this.filteredFoods = this.filteredSubCategories[0].foods;
-                    this.activeSubId = this.filteredSubCategories[0].id;
-                }
-            }
+            var catId = this.categories.map(item => item.id);
+            this.activeCatId = Math.min(...catId);
+           if(categoryId)
+                this.activeCatId = categoryId;
+                this.subCategories = this.subCategoriesAll.filter((cat) => String(cat.parent_id) === String(this.activeCatId));
+            
+            if (this.subCategories.length !== 0) {
+                this.activeSubId = this.subCategories[0].id;
+                this.foods = this.foodsAll.filter((food) => food.category_id === this.activeSubId);
+            }else{
+                this.foods = this.foodsAll.filter((food) => food.category_id === this.activeCatId);
+            }           
         },
-
         filterFoods(subCategoryId) {
-            const subCategory = this.filteredSubCategories.find((subCat) => subCat.id === subCategoryId);
+            const subCategory = this.subCategoriesAll.find((subCat) => subCat.id === subCategoryId);
             this.activeSubId = subCategoryId;
             if (subCategory) {
-                this.filteredFoods = subCategory.foods;
+                this.foods = this.foodsAll.filter((food) => food.category_id === this.activeSubId);
             } else {
-                this.filteredFoods = [];
+                this.foods = [];
             }
         },
     },
     computed: {
-        minCategoryId() {
-            return Math.min(...this.categories.map((category) => category.id));
-        },
     },
     components: {
         HeaderComponent,
