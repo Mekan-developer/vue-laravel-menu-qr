@@ -1,5 +1,5 @@
 <template>
-    <div v-if="isActiveEdit" class="flex flex-col justify-center items-center absolute left-0 top-0 z-[9999] w-full h-full bg-[#11101d63] px-16">
+    <div v-if="isActiveEdit" class="edit-food">
         <div class="bg-white rounded-lg p-4">
             <div class="flex justify-end w-full mb-4">
                 <div class="flex-grow-1 text-center text-[#216dcfbb] text-[16px]">Category edit</div>
@@ -42,4 +42,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.edit-food{
+    @apply flex flex-col justify-center items-center absolute left-0 top-0 z-[9999] w-full h-full bg-[#11101d63] px-16;
+}
+</style>

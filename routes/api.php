@@ -27,9 +27,9 @@ Route::post('/category-update/{category}', [CategoryController::class, 'update']
 
 Route::get('/food-create', [FoodController::class, 'create']);
 Route::apiResource('foods', FoodController::class);
-
-
 Route::delete('/delete-category/{id}', [CategoryController::class, 'destroy']);
+
+Route::get('/category-foods',[FoodController::class,'categoryFoods']);
 
 
 

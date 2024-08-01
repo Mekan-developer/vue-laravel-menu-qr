@@ -16,13 +16,22 @@ use Illuminate\Http\Request;
 
 class FoodController extends Controller
 {
+
+    public function categoryFoods(){
+        $category['parent'] = Food_categoryResource::collection(Category::whereNull('parent_id')->get());
+        $category['child'] = Food_categoryResource::collection(Category::whereNotNull('parent_id')->get());
+
+        $foods = FoodResource::collection(Food::with(['images','sizes'])->get());
+        return response()->json(['parent' => $category['parent'],'child' => $category['child'], 'foods' => $foods],200);
+     }
+
+     
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $foods = FoodResource::collection(Food::with('category')->with('images')->with('sizes')->get());
-
+        $foods = FoodResource::collection(Food::with(['category', 'images', 'sizes'])->get());
         return response()->json($foods, 200);
     }
 
@@ -31,7 +40,6 @@ class FoodController extends Controller
      */
     public function create()
     {
-
         $category['parent'] = Food_categoryResource::collection(Category::whereNull('parent_id')->get());
         $category['child'] = Food_categoryResource::collection(Category::whereNotNull('parent_id')->get());
 
@@ -48,6 +56,7 @@ class FoodController extends Controller
 
         // part of adding image begin code
         $imageData = $imageRequest->validated();
+       
         if ($imageRequest->hasFile('image')) {
             $imageData['food_id'] = $food->id;
             foreach ($imageRequest->file('image') as $img) {

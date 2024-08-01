@@ -1,5 +1,5 @@
 <template>
-    <div class="m-4 bg-gray-200 p-4 rounded-md">
+    <div class="hide-scrollbar">
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -15,19 +15,19 @@
             </thead>
             <tbody>
                 <tr v-for="food in Foods" :key="food.index">
-                    <th scope="row">1</th>
+                    <th scope="row">{{ food.id }}</th>
                     <td>{{ food.name[language] }}</td>
-                    <td class="py-3 px-4 w-24"><img :src="food.image[0].image" class="rounded-md w-full h-auto object-cover" alt="food's image" /></td>
+                    <td class="w-24 px-4 py-3"><img :src="food.image[0].image" class="object-cover w-full h-auto rounded-md" alt="food's image" /></td>
                     <td>{{ food.category.name[language] }}</td>
                     <td v-if="food.description">{{ food.description[language] }}</td>
                     <td v-else>no description</td>
                     <td>@mdo</td>
-                    <td class="py-3 px-4">{{ food.is_active ? "Active" : "Inactive" }}</td>
-                    <td class="py-3 px-4">
-                        <button @click="editFood(food.id)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">
+                    <td class="px-4 py-3">{{ food.is_active ? "Active" : "Inactive" }}</td>
+                    <td class="px-4 py-3">
+                        <button @click="editFood(food.id)" class="px-4 py-2 mr-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700">
                             <i class="bx bxs-edit"></i>
                         </button>
-                        <button @click.prevent="deleteFood(food.id)" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                        <button @click.prevent="deleteFood(food.id)" class="px-4 py-2 font-bold text-white bg-red-500 rounded hover:bg-red-700">
                             <i class="bx bx-trash"></i>
                         </button>
                     </td>
@@ -63,9 +63,8 @@ export default {
     methods: {
         getFoods() {
             axios.get("/api/foods").then((res) => {
-                console.log(res.data);
                 this.Foods = res.data;
-                // this.foods = res.data.data.map((item, idx) => ({ ...item, index: idx + 1 }));
+                this.Foods = res.data.data.map((item, idx) => ({ ...item, index: idx + 1 }));
             });
         },
 
@@ -95,4 +94,14 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.hide-scrollbar{
+    @apply p-4 m-4 overflow-hidden overflow-x-scroll overflow-y-scroll bg-gray-200 rounded-md ;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer and Edge */     
+}
+.hide-scrollbar::-webkit-scrollbar {
+    width: 0px; /* WebKit browsers */
+    background: transparent; /* Optional: Hide the background */
+}
+</style>

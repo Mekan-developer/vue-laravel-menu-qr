@@ -21,13 +21,15 @@ class FoodRequest extends FormRequest
      */
     public function rules(): array
     {
+        
+        $this['name'] = json_decode($this->name, true);
 
         $this->description = json_decode($this->description);
         if (empty(get_object_vars($this->description)))
             $this['description'] = null;
 
         $this['is_active'] = (filter_var(($this->is_active), FILTER_VALIDATE_BOOLEAN)) ? 1 : 0;
-
+        $this['discount'] = json_decode($this->discount);
         $rules = [
             'name' => 'required',
             'description' => 'nullable',

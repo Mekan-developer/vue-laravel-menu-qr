@@ -1,14 +1,16 @@
 <template>
-    <div class="category-create flex flex-col justify-center items-center absolute left-0 top-0 z-50 w-full h-full bg-gray-800 bg-opacity-75 px-4">
-        <div class="bg-gray-900 rounded-lg px-6 py-4 shadow-lg">
-            <div class="m-2 p-1">
-                <div class="flex justify-between items-center mb-4">
-                    <div class="text-center text-blue-500 text-xl font-semibold">Food Add</div>
-                    <i @click="$emit('popupDeleteCreate')" class="bx bx-x text-2xl p-2 cursor-pointer text-white hover:text-red-500"></i>
+    <div class="food-create">
+        <div class="px-6 py-4 bg-gray-900 rounded-lg shadow-lg">
+            <div class="p-1 m-2">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="text-xl font-semibold text-center text-blue-500">Food Add</div>
+                    <i @click="$emit('popupDeleteCreate')" 
+                        class="p-2 text-2xl text-white cursor-pointer bx bx-x hover:text-red-500">
+                    </i>
                 </div>
                 <div class="flex justify-start gap-2 mb-4">
                     <div class="w-full">
-                        <select class="form-select cursor-pointer bg-gray-200 border border-gray-400 text-gray-800 rounded p-2 focus:outline-none focus:border-blue-500" aria-label="Default select example" @change="childValNull" v-model="selectedParentCategory">
+                        <select class="category-select-style form-select" aria-label="Default select example" @change="childValNull" v-model="selectedParentCategory">
                             <option :value="null">Choose category</option>
                             <option v-for="parent in parentCategories" :key="parent.id" :value="parent.id">
                                 {{ parent.name[language] }}
@@ -17,7 +19,7 @@
                         <span class="text-red-600" v-if="errors.selectedParentCategory">{{ errors.selectedParentCategory }}</span>
                     </div>
                     <div class="w-full" v-if="!(filteredChildCategories.length === 0)">
-                        <select class="form-select cursor-pointer bg-gray-200 border border-gray-400 text-gray-800 rounded p-2 focus:outline-none focus:border-blue-500" aria-label="Default select example" v-model="selectedChildCategory">
+                        <select class="category-select-style form-select" aria-label="Default select example" v-model="selectedChildCategory">
                             <option :value="null">Select sub category</option>
                             <option v-for="child in filteredChildCategories" :key="child.id" :value="child.id">
                                 {{ child.name[language] }}
@@ -27,27 +29,27 @@
                     </div>
                 </div>
                 <div class="flex flex-wrap justify-center gap-4 mb-4">
-                    <div class="flex-grow form-floating mb-2 overflow-hidden" v-for="(lang, code) in languages" :key="code">
-                        <input type="text" v-model.trim="name[code]" class="form-control bg-gray-200 border border-gray-400 text-gray-800 rounded p-2 focus:outline-none focus:border-blue-500" :id="'input-' + code" placeholder="name" />
-                        <label :for="'input-' + code" class="leading-[20px] pl-1 text-gray-500">Name {{ code }}</label>
-                        <span class="text-red-600" v-if="errors.name[code]">{{ errors.name[code] }}</span>
+                    <div class="flex-grow mb-2 overflow-hidden form-floating" v-for="(lang, code) in languages" :key="code">
+                        <input type="text" v-model.trim="name[code]" class="custom-input form-control" :id="'input-' + code" placeholder="name" />
+                        <label :for="'input-' + code" class="leading-[20px] pl-1 text-gray-500">Food name {{ code }}</label>
+                        <span class="text-red-600" v-if="!name[code] && error">{{ errors.name[code] }}</span>
                     </div>
                 </div>
                 <div class="mb-4">
-                    <label for="formFileMultiple" class="form-label text-white">Menu Image</label>
-                    <input class="form-control bg-gray-200 border border-gray-400 text-gray-800 rounded p-2 focus:outline-none focus:border-blue-500" type="file" id="formFileMultiple" @change="onChange" multiple />
+                    <label for="formFileMultiple" class="text-white form-label">Menu Image</label>
+                    <input class="custom-input form-control" type="file" id="formFileMultiple" @change="onChange" multiple />
                     <span class="text-red-600" v-if="errors.image">{{ errors.image }}</span>
                 </div>
                 <div class="flex gap-4 mb-4 text-blue-500">
                     <div v-if="this.isEmpty(sizeData)" class="w-full">
                         <label for="price" class="form-label">Price</label>
-                        <input class="form-control bg-gray-200 border border-gray-400 text-gray-800 rounded p-2 focus:outline-none focus:border-blue-500" v-model="price" type="number" id="price" placeholder="Price" />
+                        <input class="custom-input form-control" v-model="price" type="number" id="price" placeholder="Price" />
                         <span class="text-red-600" v-if="errors.price">{{ errors.price }}</span>
                     </div>
-                    <div class="flex gap-4 w-full">
+                    <div class="flex w-full gap-4">
                         <div class="flex-grow">
                             <label for="discount" class="form-label">Discount</label>
-                            <input class="form-control bg-gray-200 border border-gray-400 text-gray-800 rounded p-2 focus:outline-none focus:border-blue-500" v-model="discount" type="number" id="discount" placeholder="Discount" />
+                            <input class="custom-input form-control" v-model="discount" type="number" id="discount" placeholder="Discount" />
                         </div>
 
                         <div>
@@ -60,17 +62,17 @@
                                 <i v-if="!this.isEmpty(sizeData)" class="bx bx-check-square text-green-500 text-[26px]"></i>
                                 <div class="flex-nowrap">+Size</div>
                             </div>
-                            <select class="form-select bg-gray-200 border border-gray-400 text-gray-800 rounded p-2 focus:outline-none focus:border-blue-500" v-model="discount_unit">
+                            <select class="select-style form-select" v-model="discount_unit">
                                 <option selected value="manat">TMT</option>
                                 <option value="percent">%</option>
                             </select>
                         </div>
                     </div>
                 </div>
-                <div class="flex justify-between items-center mb-4">
+                <div class="flex items-center justify-between mb-4">
                     <div class="flex items-center gap-2">
                         <label class="switch">
-                            <input type="checkbox" v-model="isActive" />
+                            <input type="checkbox" v-model="isActive" id="active">
                             <span class="slider round"></span>
                         </label>
 
@@ -78,7 +80,7 @@
                     </div>
                     <div class="flex items-center gap-2">
                         <label class="switch">
-                            <input type="checkbox" v-model="descriptionActive" />
+                            <input type="checkbox" v-model="descriptionActive" id="checkbox">
                             <span class="slider round"></span>
                         </label>
                         <i v-if="this.isEmpty(descriptionData)" class="bx bxs-x-circle text-red-500 text-[26px]"></i>
@@ -89,7 +91,7 @@
                 <description-component v-if="descriptionActive" :languages="languages" @updateDescActVal="updateDescActVal" @descriptionDataFun="descriptionDataFun" :descriptionData="descriptionData"></description-component>
                 <size-component v-if="addFoodSizeActive" :languages="languages" @cancelSize="cancelFoodSize" @removeSizeData="removeSizeData" @sizeDataFun="sizeDataFun" :sizeData="sizeData"></size-component>
                 <div class="mt-4">
-                    <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded w-full" type="button" @click.prevent="storeFoods">Save</button>
+                    <button class="w-full px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-600" type="button" @click.prevent="storeFoods">Save</button>
                 </div>
             </div>
         </div>
@@ -110,6 +112,7 @@ export default {
     data() {
         const name = {};
         return {
+            error: false,
             name: name,
             image: [],
             price: null,
@@ -129,10 +132,12 @@ export default {
             errors: {
                 name: {},
             },
+            isLoading: false,
         };
     },
     created() {
         this.getCategories();
+        this. input_names();
     },
     methods: {
         validations() {
@@ -147,8 +152,11 @@ export default {
             Object.keys(this.languages).forEach((code) => {
                 if (!this.name[code]) {
                     this.errors.name[code] = `Name ${code} is required.`;
-                } else if (this.name[code].length < 3) this.errors.name[code] = `Name ${code} must be at least 3 characters.`;
-                else delete this.errors.name[code];
+                    this.error = true
+                } else if (this.name[code].length < 3) {
+
+                 this.errors.name[code] = `Name ${code} must be at least 3 characters.`;
+                } else delete this.errors.name[code];
             });
             if (this.image.length === 0) this.errors.image = "Image is required."; //Image validation
             else delete this.errors.image;
@@ -160,6 +168,10 @@ export default {
         },
         storeFoods() {
             this.validations();
+            if (this.isLoading) {
+                return;
+            }
+            this.isLoading = true;
             if (Object.keys(this.errors).length === 1 && Object.keys(this.errors.name).length === 0) {
                 let formData = new FormData();
                 if (this.image.length > 0) Object.keys(this.image).forEach((key) => formData.append("image[]", this.image[key]));
@@ -172,7 +184,7 @@ export default {
                 if (this.sizeData.length > 0) formData.append("food_sizes", JSON.stringify(this.sizeData));
                 if (this.sizeData.length == 0) formData.append("price", this.price);
                 axios.post("/api/foods", formData).then((res) => {
-                    console.log(res);
+                    this.$emit('popupDeleteCreate');
                 });
             }
         },
@@ -233,7 +245,19 @@ export default {
 </script>
 
 <style>
-.category-create {
-    color: #0d6efd;
+.food-create {
+    @apply absolute top-0 left-0 z-50 flex flex-col items-center justify-center w-full h-full px-4 bg-gray-800 bg-opacity-75 text-[#0d6efd];
 }
+
+.custom-input {
+    @apply p-2 text-gray-800 bg-gray-200 border border-gray-400 rounded focus:outline-none focus:border-blue-500;
+}
+.select-style{
+    @apply p-2 text-gray-800 bg-gray-200 border border-gray-400 rounded focus:outline-none focus:border-blue-500;
+}
+
+.category-select-style{
+    @apply p-2 text-gray-800 bg-gray-200 border border-gray-400 rounded cursor-pointer focus:outline-none focus:border-blue-500;
+}
+
 </style>

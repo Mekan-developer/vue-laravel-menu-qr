@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class FoodResource extends JsonResource
+class CategoryfoodResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,14 +17,11 @@ class FoodResource extends JsonResource
         $data = [
             'id' => $this->id,
             'name' => $this->getTranslations('name'),
-            'image' => ImageResource::collection($this->images),
-            'category' => new Food_categoryResource($this->category),
-            'category_id' => $this->category_id,
-            'description' => $this->descripton,
+            'image' => $this->getImage(),
             'is_active' => $this->is_active,
-            'sizes' => SizeResource::collection($this->sizes),
+            'parent_id' => $this->parent_id,
+            'oreder' => $this->order,
         ];
-
         return $data;
     }
 }

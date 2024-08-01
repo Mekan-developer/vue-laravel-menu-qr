@@ -1,21 +1,22 @@
 <template>
     <div class="popup-main" v-show="visibility">
-        <div class="popup-lang">
-            <div class="langs-div bg-white z-30 rounded p-2 m-4 box-border">
-                <div class="flex p-2 mb-1">
-                    <div class="flex-grow"></div>
-                    <button @click="toggleVisibility" class="flex justify-center items-center rounded-full bg-gray-400 w-[26px] h-[26px]">
-                        <img :src="crosSVG()" alt="" />
-                    </button>
-                </div>
-                <div class="flex flex-col justify-center gap-2 mb-3 w-full h-full text-white">
-                    <button v-for="(lang, index) in langs" :key="index" class="p-2 bg-gray-400" @click="changeLang(index)">
-                        <p>{{ lang }}</p>
-                    </button>
-                </div>
+    <div class="popup-lang">
+        <div class="box-border z-30 p-2 m-4 bg-gray-200 rounded langs-div">
+            <div class="flex p-2 mb-1">
+                <div class="flex-grow"></div>
+                <button @click="toggleVisibility" class="flex justify-center items-center rounded-full bg-gray-800 w-[26px] h-[26px]">
+                    <img :src="crosSVG()" alt="" />
+                </button>
+            </div>
+            <div class="flex flex-col justify-center w-full h-full gap-2 mb-3 text-white">
+                <button v-for="(lang, index) in langs" :key="index" class="p-2 bg-gray-800 hover:bg-gray-900" @click="changeLang(index)">
+                    <p>{{ lang }}</p>
+                </button>
             </div>
         </div>
     </div>
+</div>
+
 </template>
 
 <script>
@@ -60,11 +61,10 @@ export default {
     top: -550px;
     animation: drop 1.8s ease forwards;
 }
-/* popup animation style end */
 
+/* popup animation style end */
 @keyframes drop {
-    0% {
-    }
+    0% {}
     30% {
         transform: translateY(600px);
     }
