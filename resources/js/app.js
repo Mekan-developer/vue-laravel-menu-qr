@@ -1,4 +1,4 @@
-// import "./bootstrap";
+import "./bootstrap";
 import { createApp } from "vue";
 import MainComponent from "./components/MainComponent.vue";
 import router from "./router";
