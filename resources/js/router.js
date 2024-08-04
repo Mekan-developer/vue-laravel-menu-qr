@@ -2,15 +2,20 @@ import { createRouter, createWebHistory } from "vue-router";
 
 const routes = [
     {
-        path: "/",
+        path: "/", name: "menu.index",
         component: () => import("./components/MenuUser/IndexComponent.vue"),
-        name: "menu.index",
     },
     {
-        path: "/dashboard",
-        component: () =>
-            import("./components/MenuDashboard/IndexComponent.vue"),
-        name: "dashboard.index",
+        path: "/login", name: "user.login",
+        component: () => import("./components/Auth/LoginComponent.vue"),
+    },
+    {
+        path: "/register", name: "user.register",
+        component: () => import("./components/Auth/RegisterComponent.vue"),
+    },
+    {
+        path: "/dashboard", name: "dashboard.index",
+        component: () => import("./components/MenuDashboard/IndexComponent.vue"),
         children: [
             {
                 path: "",
@@ -72,27 +77,48 @@ const routes = [
             },
             {
                 path: "settings",
-                component: () =>
-                    import(
-                        "./components/MenuDashboard/DashboardParts/SettingsComponent.vue"
-                    ),
+                component: () => import("./components/MenuDashboard/DashboardParts/SettingsComponent.vue"),
                 name: "dashboard.settings",
             },
             {
-                path: "profile",
-                component: () =>
-                    import(
-                        "./components/MenuDashboard/DashboardParts/ProfileComponent.vue"
-                    ),
+                path: "profile", component: () => import("./components/MenuDashboard/DashboardParts/ProfileComponent.vue"),
                 name: "dashboard.profile",
             },
+
+            
         ],
     },
+    {
+        path: '/:pathMatch(.*)*',
+        name: '404',
+        component: () => import("./components/notFoundPage/ErrorComponent.vue"),  
+    },
 ];
+
+
 
 const router = createRouter({
     history: createWebHistory(),
     routes,
 });
+
+router.beforeEach((to,from,next) =>{
+    const access_token = localStorage.getItem('access_token')
+    if(to.name === 'menu.index')
+        return next()
+    if(!access_token) {
+        if(to.name === 'user.login' || to.name === 'user.register')
+            return next()
+        else
+            return next({
+                name:'user.login'
+            })
+    }else if((to.name === 'user.login' || to.name === 'user.register') && access_token){
+        return next({
+            name:'dashboard.parts.index'
+        })
+    }
+    next()
+})
 
 export default router;

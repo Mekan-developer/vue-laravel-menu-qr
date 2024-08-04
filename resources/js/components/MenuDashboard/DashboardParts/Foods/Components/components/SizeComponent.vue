@@ -1,21 +1,24 @@
 <template>
     <div class="flex justify-center items-center absolute z-50 top-0 left-0 w-full h-full bg-[#818181cc]">
-        <div class="flex flex-col gap-4 bg-gray-800 px-6 py-4 rounded-lg relative shadow-lg">
+        <div class="relative flex flex-col gap-4 px-6 py-4 bg-gray-800 rounded-lg shadow-lg">
             <div class="absolute top-2 right-2">
-                <i @click="cancel" class="bx bx-x text-2xl p-2 cursor-pointer text-white hover:text-red-500"></i>
+                <i @click="cancel" class="p-2 text-2xl text-white cursor-pointer bx bx-x hover:text-red-500"></i>
             </div>
-            <div class="text-center text-white text-xl font-semibold mb-1">Add food size</div>
-            <div class="flex gap-2 justify-end -mb-2">
-                <button @click="removeFoodSize" v-if="foodSizes > 1" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">- {{ foodSizes }} Remove</button>
-                <button @click="addFoodSize" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">+ Add Size</button>
+            <div class="mb-1 text-xl font-semibold text-center text-white">Add food size</div>
+            <div class="flex justify-end gap-2 -mb-2">
+                <button @click="removeFoodSize" v-if="foodSizes > 1" class="px-4 py-2 font-bold text-white bg-red-500 rounded hover:bg-red-600">- {{ foodSizes }} Remove</button>
+                <button @click="addFoodSize" class="px-4 py-2 font-bold text-white bg-green-500 rounded hover:bg-green-600">+ Add Size</button>
             </div>
-            <div class="w-full max-h-[300px] overflow-hidden overflow-y-auto no-scrollbar box-shad relative">
-                <div class="space-y-4 mt-6 mb-2" v-for="size in foodSizes" :key="size">
-                    <div class="p-4 border border-gray-300 rounded-lg shadow-md bg-white">
-                        <div class="flex flex-wrap justify-center gap-4 mt-2">
-                            <div class="flex-grow form-floating mb-2" v-for="(lang, code) in languages" :key="lang.index">
-                                <input type="text" v-model="foodSizeName[size][code]" class="inputStyle form-control" :id="'input-' + size + code" placeholder="Category name" />
-                                <label :for="'input-' + size + code" class="leading-[32px] pl-3 text-gray-500">Category name {{ code }} </label>
+            <div class="w-full max-h-[300px] overflow-hidden overflow-y-auto no-scrollbar relative px-1">
+                <div class="mt-6 mb-2 " v-for="size in foodSizes" :key="size">
+                    <div class="p-4 bg-gray-300 border border-gray-300 rounded-md shadow-md">
+                        <div class="m-0">
+                            <p class="pl-4 text-[18px]">Food's size {{ size }}</p>
+                        </div>
+                        <div class="flex flex-wrap justify-center gap-4">
+                            <div class="flex-grow mb-2 " v-for="(lang, code) in languages" :key="lang.index"> 
+                                <label :for="'input-' + size + code" class="leading-[32px] pl-3 text-gray-500 form-label">Category name {{ code }} </label>
+                                <input type="text" v-model="foodSizeName[size][code]" class="inputStyle custom-input form-control" :id="'input-' + size + code" placeholder="Category name" />
                                 <div v-if="errors[size] && errors[size][code]" class="text-red-500">{{ errors[size][code] }}</div>
                             </div>
                         </div>
@@ -26,12 +29,12 @@
                     </div>
                 </div>
 
-                <div class="sticky bottom-0 w-full h-10 bg-gradient-to-t from-gray-100 to-transparent flex items-center justify-center">
-                    <div class="w-full h-full" style="box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1)"></div>
+                <div class="sticky bottom-0 flex items-center justify-center w-full h-5 bg-gradient-to-t from-gray-600 to-transparent">
+                    <div class="w-full h-full" style="box-shadow: 0 -4px 5px rgba(0, 0, 0, 0.01)"></div>
                 </div>
             </div>
 
-            <button @click.prevent="store" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded w-full" type="submit">Save</button>
+            <button @click.prevent="store" class="w-full px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-600" type="submit">Save</button>
         </div>
     </div>
 </template>
@@ -134,12 +137,16 @@ export default {
 </script>
 
 <style>
-.inputStyle form-control {
-    @apply bg-gray-200 border border-gray-400 text-gray-800 rounded p-2 focus:outline-none focus:border-blue-500;
+.inputStyle {
+    @apply border border-gray-400 text-gray-800 rounded p-2 focus:outline-none focus:border-blue-500;
 }
 .no-scrollbar::-webkit-scrollbar {
-    display: none;
+    scrollbar-width: thin;
 }
+.no-scrollbar {
+    scrollbar-width: thin;
+}
+
 
 .multy_size_style {
     @apply p-2 mb-1;

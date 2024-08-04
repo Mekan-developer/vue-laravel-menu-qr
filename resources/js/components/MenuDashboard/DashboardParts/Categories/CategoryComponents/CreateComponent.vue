@@ -9,17 +9,18 @@
             <form @submit.prevent="store">
                 <div class="w-full max-h-[300px] overflow-hidden overflow-y-auto no-scrollbar box-shad relative">
                     <div class="mt-6 mb-2 space-y-1">
-                        <div class="flex flex-wrap justify-center gap-4 mt-2">
-                            <div class="flex-grow mb-2 form-floating" v-for="(lang, code) in languages" :key="code">
-                                <input type="text" v-model="name[code]" class="p-2 text-gray-800 bg-gray-200 border border-gray-400 rounded form-control focus:outline-none focus:border-blue-500" :id="'input-' + code" placeholder="Category name" />
-                                <label :for="'input-' + code" class="leading-[20px] pl-1 text-gray-500">Name {{ code }}</label>
+                        <div class="flex flex-wrap justify-center gap-2 mt-2">
+                            <div class="flex-grow mb-2" v-for="(lang, code) in languages" :key="code">
+                                <label :for="'input-' + code" class="text-label-style form-label">Name {{ code }}</label>
+                                <input type="text" v-model="name[code]" class="p-2 text-gray-800 bg-gray-200 border border-gray-400 custom-input form-control focus:outline-none focus:border-blue-500" :id="'input-' + code" placeholder="Category name" />
+                                
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="mb-4">
-                    <label for="formFileMultiple" class="block mb-2 text-white">Menu image</label>
+                    <label for="formFileMultiple" class="block mb-2 text-white">Category image</label>
                     <input type="file" @change="onChange" id="formFileMultiple" class="w-full p-2 text-gray-800 bg-gray-200 border border-gray-400 rounded focus:outline-none focus:border-blue-500" />
                 </div>
 

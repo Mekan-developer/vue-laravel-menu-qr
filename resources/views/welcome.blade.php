@@ -10,8 +10,7 @@
         {{-- <script>window.locales = Object.keys(@json(LaravelLocalization::getSupportedLocales()));</script> --}}
     </head>
     <body >
-        <div id="app">
-            
+        <div id="app">            
             <main-component></main-component>
         </div>
     </body>

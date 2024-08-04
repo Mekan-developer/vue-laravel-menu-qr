@@ -14,21 +14,33 @@
     </div>
     <div class="row-two">
         <div class="categories">
-            <div :class="this.activeCatId === category.id ? 'activeCat' : 'notActiveCat'" v-for="category in categories" :key="category.id" @click="filterSubCategories(category.id)" class="category">
-                <div class="rounded-sm category-img">
-                    <img :src="category.image" alt="" />
-                </div>
-                <div class="category-name">
-                    {{ category.name[currentLang] }}
-                </div>
-            </div>
+            <carousel :items-to-show="6" class="w-full">
+                <slide :class="this.activeCatId === category.id ? 'activeCat' : 'notActiveCat'" v-for="category in categories" :key="category.id" @click="filterSubCategories(category.id)" class="category">
+                    <div class="rounded-sm category-img">
+                        <img :src="category.image" alt="" />
+                    </div>
+                    <div class="category-name">
+                        {{ category.name[currentLang] }}
+                    </div>
+                </slide>
+                <template #addons >
+                <navigation class="pb-4" />
+                <pagination />
+                </template>
+            </carousel>
         </div>
+        
+            
     </div>
+
 </header>
 
 </template>
 
 <script>
+import 'vue3-carousel/dist/carousel.css'
+import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel'
+
 export default {
     props: {
         lang: String,
@@ -36,6 +48,12 @@ export default {
         currentLang: String,
         activeCatId: Number,
     },
+    components: {
+    Carousel,
+    Slide,
+    Pagination,
+    Navigation,
+  },
     data() {
         return {
             dinamicClass: {

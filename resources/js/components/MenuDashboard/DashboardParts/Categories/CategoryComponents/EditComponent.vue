@@ -1,25 +1,26 @@
 <template>
     <div class="flex justify-center items-center absolute z-50 top-0 left-0 w-full h-full bg-[#818181cc]">
-        <div class="flex flex-col gap-4 bg-gray-800 px-6 py-4 rounded-lg relative shadow-lg max-w-md w-full">
+        <div class="relative flex flex-col w-full max-w-md gap-4 px-6 py-4 bg-gray-800 rounded-lg shadow-lg">
             <div class="absolute top-2 right-2">
-                <i @click="$emit('popupDeleteEdit')" class="bx bx-x text-2xl p-2 cursor-pointer text-white hover:text-red-500"></i>
+                <i @click="$emit('popupDeleteEdit')" class="p-2 text-2xl text-white cursor-pointer bx bx-x hover:text-red-500"></i>
             </div>
-            <div class="text-center text-white text-xl font-semibold mb-1">Category Edit</div>
+            <div class="mb-1 text-xl font-semibold text-center text-white">Category Edit</div>
 
             <div class="w-full max-h-[300px] overflow-hidden overflow-y-auto no-scrollbar box-shad relative">
-                <div class="space-y-1 mt-6 mb-2">
+                <div class="mt-6 mb-2 space-y-1">
                     <div class="flex flex-wrap justify-center gap-4 mt-2">
-                        <div class="flex-grow form-floating mb-2" v-for="(lang, index) in languages" :key="index">
-                            <input type="text" v-model="name[index]" class="form-control bg-gray-200 border border-gray-400 text-gray-800 rounded p-2 focus:outline-none focus:border-blue-500" :id="'floatingInput' + lang" placeholder="Category name" />
-                            <label :for="'floatingInput' + lang" class="leading-20px] pl-1 text-gray-500">Name {{ index }}</label>
+                        <div class="flex-grow mb-2" v-for="(lang, index) in languages" :key="index">
+                            <label :for="'floatingInput' + lang" class="text-label-style form-label">Name {{ index }}</label>
+                            <input type="text" v-model="name[index]" class="p-2 text-gray-800 bg-gray-200 border border-gray-400 rounded custom-input form-control focus:outline-none focus:border-blue-500" :id="'floatingInput' + lang" placeholder="Category name" />
+                            
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="mb-4">
-                <label for="formFileMultiple" class="block mb-2 text-white">Menu image</label>
-                <input type="file" @change="onChange" id="formFileMultiple" class="bg-gray-200 border border-gray-400 text-gray-800 rounded p-2 focus:outline-none focus:border-blue-500 w-full" />
+                <label for="formFileMultiple" class="block mb-2 text-white">Category image</label>
+                <input type="file" @change="onChange" id="formFileMultiple" class="w-full p-2 text-gray-800 bg-gray-200 border border-gray-400 rounded focus:outline-none focus:border-blue-500" />
             </div>
 
             <div class="flex items-center gap-2">
@@ -30,7 +31,7 @@
                 <span class="text-white">Is Active</span>
             </div>
 
-            <button @click.prevent="update(category.id)" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded w-full" type="button">Save</button>
+            <button @click.prevent="update(category.id)" class="w-full px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-600" type="button">Save</button>
         </div>
     </div>
 </template>

@@ -1,6 +1,6 @@
 <template>
-    <div class="dashboard-body w-full h-full">
-        <div :class="{ activeClass: isActive }" class="sidebar z-50">
+    <div class="w-full h-full dashboard-body">
+        <div :class="{ activeClass: isActive }" class="z-50 sidebar">
             <div class="logo_content">
                 <div class="logo">
                     <i class="bx bxl-bitcoin"></i>
@@ -11,7 +11,7 @@
             <ul class="nav_list">
                 <li>
                     <i class="bx bx-search" v-if="!isActive" @click="sidebarActive()"></i>
-                    <i class="bx bx-search cursor-default" v-else></i>
+                    <i class="cursor-default bx bx-search" v-else></i>
                     <input type="text" placeholder="Search..." />
                     <span class="tooltip">Search</span>
                     <div class="arrowToolTip"></div>
@@ -50,7 +50,7 @@
                         <i class="bx bx-devices"></i>
                         <span class="links_name">Restaurant settins</span>
                     </router-link>
-                    <span class="tooltip pl-4">main settings</span>
+                    <span class="pl-4 tooltip">main settings</span>
                     <div class="arrowToolTip"></div>
                 </li>
                 <li>
@@ -75,7 +75,8 @@
                             </router-link>
                         </div>
                     </div>
-                    <i class="bx bx-log-out" id="log_out"></i>
+
+                    <i @click="logOut" class="cursor-pointer bx bx-log-out" id="log_out"></i>
                 </div>
             </div>
         </div>
@@ -86,6 +87,8 @@
 </template>
 
 <script>
+import api from "../../api"
+
 export default {
     props: {
         language: String,
@@ -101,6 +104,15 @@ export default {
         sidebarActive() {
             this.isActive = !this.isActive;
         },
+        logOut(){
+            api.post('/api/auth/logout').then(res => {
+                localStorage.removeItem('access_token');
+                this.$router.push({ name: 'user.login' });
+            }).catch(err => {
+                console.log('error')
+                console.log(err)
+            })
+        }
     },
 };
 </script>

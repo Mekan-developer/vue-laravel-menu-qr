@@ -1,60 +1,62 @@
 <template>
     <div class="food-create">
-        <div class="px-6 py-4 bg-gray-900 rounded-lg shadow-lg">
+        <div class="px-6 py-4 text-blue-500 bg-gray-900 rounded-lg shadow-lg">
             <div class="p-1 m-2">
                 <div class="flex items-center justify-between mb-4">
-                    <div class="text-xl font-semibold text-center text-blue-500">Food Add</div>
+                    <div class="text-xl font-semibold text-center text-white">Food Add</div>
                     <i @click="$emit('popupDeleteCreate')" 
                         class="p-2 text-2xl text-white cursor-pointer bx bx-x hover:text-red-500">
                     </i>
                 </div>
                 <div class="flex justify-start gap-2 mb-4">
                     <div class="w-full">
+                        <label class="mb-0 form-label">Choose category</label>
                         <select class="category-select-style form-select" aria-label="Default select example" @change="childValNull" v-model="selectedParentCategory">
-                            <option :value="null">Choose category</option>
+                            <option hidden :value="null">Choose category</option>
                             <option v-for="parent in parentCategories" :key="parent.id" :value="parent.id">
                                 {{ parent.name[language] }}
                             </option>
                         </select>
-                        <span class="text-red-600" v-if="errors.selectedParentCategory">{{ errors.selectedParentCategory }}</span>
+                        <span class="text-red-600"  v-if="!selectedParentCategory && error">{{ errors.selectedParentCategory }}</span>
                     </div>
                     <div class="w-full" v-if="!(filteredChildCategories.length === 0)">
+                        <label class="mb-0 form-label">choose sub category</label>
                         <select class="category-select-style form-select" aria-label="Default select example" v-model="selectedChildCategory">
                             <option :value="null">Select sub category</option>
                             <option v-for="child in filteredChildCategories" :key="child.id" :value="child.id">
                                 {{ child.name[language] }}
                             </option>
                         </select>
-                        <span class="text-red-600" v-if="errors.selectedChildCategory">{{ errors.selectedChildCategory }}</span>
+                        <span class="text-red-600" v-if="!selectedChildCategory && error">{{ errors.selectedChildCategory }}</span>
                     </div>
                 </div>
                 <div class="flex flex-wrap justify-center gap-4 mb-4">
-                    <div class="flex-grow mb-2 overflow-hidden form-floating" v-for="(lang, code) in languages" :key="code">
-                        <input type="text" v-model.trim="name[code]" class="custom-input form-control" :id="'input-' + code" placeholder="name" />
-                        <label :for="'input-' + code" class="leading-[20px] pl-1 text-gray-500">Food name {{ code }}</label>
+                    <div class="flex-grow mb-2 overflow-hidden" v-for="(lang, code) in languages" :key="code">
+                        <label :for="'input-' + code" class="mb-0 form-label">Food name {{ code }}</label>
+                        <input type="text" v-model.trim="name[code]" class="custom-input form-control" :id="'input-' + code" placeholder = 'Foods name' />
                         <span class="text-red-600" v-if="!name[code] && error">{{ errors.name[code] }}</span>
                     </div>
                 </div>
                 <div class="mb-4">
-                    <label for="formFileMultiple" class="text-white form-label">Menu Image</label>
+                    <label for="formFileMultiple" class="mb-0 form-labe">Menu Image</label>
                     <input class="custom-input form-control" type="file" id="formFileMultiple" @change="onChange" multiple />
-                    <span class="text-red-600" v-if="errors.image">{{ errors.image }}</span>
+                    <span class="text-red-600"  v-if="!errImage && error">{{ errors.image }}</span>
                 </div>
                 <div class="flex gap-4 mb-4 text-blue-500">
                     <div v-if="this.isEmpty(sizeData)" class="w-full">
-                        <label for="price" class="form-label">Price</label>
+                        <label for="price" class="mb-0 form-label">Price</label>
                         <input class="custom-input form-control" v-model="price" type="number" id="price" placeholder="Price" />
-                        <span class="text-red-600" v-if="errors.price">{{ errors.price }}</span>
+                        <span class="text-red-600" v-if="!price && error">{{ errors.price }}</span>
                     </div>
                     <div class="flex w-full gap-4">
                         <div class="flex-grow">
-                            <label for="discount" class="form-label">Discount</label>
+                            <label for="discount" class="mb-0 form-label">Discount</label>
                             <input class="custom-input form-control" v-model="discount" type="number" id="discount" placeholder="Discount" />
                         </div>
 
                         <div>
-                            <div class="flex items-center gap-2 mb-1">
-                                <label class="switch">
+                            <div class="flex items-center gap-2 -mt-[2px]">
+                                <label class="mb-0 switch">
                                     <input type="checkbox" v-model="addFoodSizeActive" />
                                     <span class="slider round"></span>
                                 </label>
@@ -76,7 +78,7 @@
                             <span class="slider round"></span>
                         </label>
 
-                        <span class="text-white">Is Active</span>
+                        <span class="">Is Active</span>
                     </div>
                     <div class="flex items-center gap-2">
                         <label class="switch">
@@ -85,9 +87,10 @@
                         </label>
                         <i v-if="this.isEmpty(descriptionData)" class="bx bxs-x-circle text-red-500 text-[26px]"></i>
                         <i v-if="!this.isEmpty(descriptionData)" class="bx bx-check-square text-green-500 text-[26px]"></i>
-                        <span class="text-white">Description</span>
+                        <span class="">Description</span>
                     </div>
                 </div>
+                
                 <description-component v-if="descriptionActive" :languages="languages" @updateDescActVal="updateDescActVal" @descriptionDataFun="descriptionDataFun" :descriptionData="descriptionData"></description-component>
                 <size-component v-if="addFoodSizeActive" :languages="languages" @cancelSize="cancelFoodSize" @removeSizeData="removeSizeData" @sizeDataFun="sizeDataFun" :sizeData="sizeData"></size-component>
                 <div class="mt-4">
@@ -99,7 +102,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import api from "../../../../../api";
 import DescriptionComponent from "./components/DescriptionComponent.vue";
 import SizeComponent from "./components/SizeComponent.vue";
 
@@ -112,7 +115,6 @@ export default {
     data() {
         const name = {};
         return {
-            error: false,
             name: name,
             image: [],
             price: null,
@@ -132,6 +134,8 @@ export default {
             errors: {
                 name: {},
             },
+            error: false,
+            errorImage: false,
             isLoading: false,
         };
     },
@@ -183,7 +187,7 @@ export default {
                 formData.append("is_active", JSON.stringify(this.isActive));
                 if (this.sizeData.length > 0) formData.append("food_sizes", JSON.stringify(this.sizeData));
                 if (this.sizeData.length == 0) formData.append("price", this.price);
-                axios.post("/api/foods", formData).then((res) => {
+                api.post("/api/foods", formData).then((res) => {
                     this.$emit('popupDeleteCreate');
                 });
             }
@@ -194,7 +198,7 @@ export default {
             });
         },
         getCategories() {
-            axios.get("/api/food-create").then((res) => {
+            api.get("/api/food-create").then((res) => {
                 this.childCategories = res.data.child;
                 this.parentCategories = res.data.parent;
             });
@@ -203,7 +207,7 @@ export default {
             this.selectedChildCategory = null;
         },
         onChange(e) {
-            this.image = e.target.files;
+            this.image = e.target.files;            
         },
         cancelFoodSize() {
             this.addFoodSizeActive = false;
@@ -236,6 +240,12 @@ export default {
         filteredChildCategories() {
             return this.childCategories.filter((child) => child.parent_id === this.selectedParentCategory);
         },
+        errImage(){
+            if (this.image.length > 0)
+                return true
+            return false
+        }
+        
     },
     components: {
         DescriptionComponent,
